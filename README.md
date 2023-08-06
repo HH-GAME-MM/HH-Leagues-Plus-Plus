@@ -1,1 +1,1 @@
-# HH-Leagues-Plus-Plus
+# HH-League-Plus-Plus
