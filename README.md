@@ -11,5 +11,4 @@ Features:
 - Battle Simulator
 - bye bye pre-battle page 
 
-![grafik](https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/assets/107755486/ae7f45bb-6aff-4b30-a23c-be011ae08887)
-
+![img](https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/assets/107755486/9264bbe5-3c5f-438f-95b3-832cc04bf3fb)
