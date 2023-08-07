@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++
-// @version      0.1
+// @version      0.2
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/tower-of-fame.html
@@ -20,6 +20,8 @@
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=hentaiheroes.com
 // @grant        none
 // ==/UserScript==
+
+//CHANGELOG: https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/CHANGELOG.md
 
 (function() {
     //definitions
@@ -45,7 +47,8 @@
         css.sheet.insertRule('#leagues .league_content .league_buttons {max-width:100% !important;}');
         css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block {width:20.5rem !important;}');
         css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .multiple-battles {height:43px !important;padding-top:6px !important;}');
-        css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .blue_button_L, #leagues .league_content .league_buttons .league_buttons_block .orange_button_L {width: 116px !important; padding: 10px;}');
+        css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .blue_button_L, #leagues .league_content .league_buttons .league_buttons_block .orange_button_L { display:none !important; width: 116px !important; padding: 10px}');
+        css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .changeTeam { margin-left:10px;font-size:12px;padding-left:16px !important }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="match_history"] .result.unknown { background-image: linear-gradient(to top,#244922 0,#979f96 100%) }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] { column-gap: 3px; }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] .team-theme.icon { width:20px;height:20px }');
@@ -82,10 +85,14 @@
         //vars
         let currentOpponent = null;
 
+        //add a confirmation for the 15x button
+        let btn = document.querySelector('#leagues .league_content .league_buttons .league_buttons_block .blue_button_L, #leagues .league_content .league_buttons .league_buttons_block .orange_button_L');
+        btn.parentNode.replaceChild(btn.cloneNode(true), btn);
+        addMultipleBattlesButtonClick();
+
         //add change team button
-        let btn = document.createElement('a');
-        btn.setAttribute('class', 'blue_button_L');
-        btn.setAttribute('style', 'margin-left:10px;font-size:12px;padding-left:16px');
+        btn = document.createElement('a');
+        btn.setAttribute('class', 'blue_button_L changeTeam');
         btn.innerHTML = '<div>Change team</div>';
         btn.addEventListener("click", function() {
             localStorage.setItem('battle_type', 'leagues');
@@ -93,6 +100,9 @@
             window.location.href = '/teams.html';
         });
         document.querySelector('.league_buttons_block').appendChild(btn);
+
+        //show 15x button and change team button
+        document.querySelectorAll('#leagues .league_content .league_buttons .league_buttons_block .blue_button_L, #leagues .league_content .league_buttons .league_buttons_block .orange_button_L').forEach((e) => e.setAttribute('style', 'display:block !important'));
 
         //add a div for the opponent view
         let div = document.createElement('div');
@@ -128,6 +138,16 @@
                             })
                         }
                         columns[j].innerHTML = teamThemeHtml;
+                    }
+
+                    //highlight expired opponent boosters
+                    if(Hero.infos.id !== id && columns[j].getAttribute('column') === 'boosters')
+                    {
+                        columns[j].querySelectorAll('div[type=booster]').forEach((e) => {
+                            if (JSON.parse(e.getAttribute('data-d')).expiration === 0) {
+                                e.setAttribute('style', 'border:1px solid red;opacity:0.5');
+                            }
+                        });
                     }
 
                     columns[j].parentNode.replaceChild(columns[j].cloneNode(true), columns[j]);
@@ -376,6 +396,23 @@
                 if(opponents_list[i].player.id_fighter == id) return opponents_list[i];
             }
             return null;
+        }
+
+        //modified KK function, Code Line 27058 default.js v69097541 2023-08-03
+        function addMultipleBattlesButtonClick() {
+            $(".multiple-battles").on("click", function() {
+                if(confirm('Perform 15x?')) {
+                    $(this).blur();
+                    var startBattles = function startBattles() {
+                        return ajaxBattle("challenge", {
+                            action: "do_battles_leagues",
+                            number_of_battles: 15
+                        })
+                    };
+                    var hc_price = $(this).attr("price");
+                    hc_confirm(hc_price, startBattles)
+                }
+            })
         }
     }
 
