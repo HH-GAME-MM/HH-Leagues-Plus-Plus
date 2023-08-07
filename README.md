@@ -9,7 +9,7 @@ Features:
 - Open Hero Profile (click avatar)
 - Challenge x1 / Challenge x3
 - Battle Simulator
-- Fade expired opponent boosters
+- Fade expired boosters
 - Confirmation for 15x button
 - bye bye pre-battle page 
 
