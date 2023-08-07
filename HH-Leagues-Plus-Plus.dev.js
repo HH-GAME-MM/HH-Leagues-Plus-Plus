@@ -140,7 +140,7 @@
                         columns[j].innerHTML = teamThemeHtml;
                     }
 
-                    //highlight expired opponent boosters
+                    //fade expired opponent boosters
                     if(Hero.infos.id !== id && columns[j].getAttribute('column') === 'boosters')
                     {
                         columns[j].querySelectorAll('div[type=booster]').forEach((e) => {
