@@ -2,6 +2,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.3] - 2023-08-08
+
+### Changed
+- Compatibility update for the new code on the test server
+  
 ## [0.2] - 2023-08-07
 
 ### Added
