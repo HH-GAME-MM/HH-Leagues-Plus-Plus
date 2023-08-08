@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++
-// @version      0.2
+// @version      0.3
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/tower-of-fame.html
@@ -151,6 +151,14 @@
                     }
 
                     columns[j].parentNode.replaceChild(columns[j].cloneNode(true), columns[j]);
+                }
+
+                //remove the go_pre_battle class so that the code in addOpponentRowClick() no longer finds the button (compatibility for new code on test server)
+                let btnGo = opponentRows[i].querySelector('.data-column[column="can_fight"] .go_pre_battle');
+                if(btnGo !== null)
+                {
+                    btnGo.classList.remove('go_pre_battle');
+                    btnGo.addEventListener("click", function() { loadingAnimation.start() });
                 }
 
                 //add a new event listener
