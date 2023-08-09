@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++
-// @version      0.3
+// @version      0.4
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/tower-of-fame.html
@@ -347,6 +347,11 @@
         function hideLeagueGirl()
         {
             let btnGirl = document.getElementById('toggle_columns');
+
+            //fix KK bug, if you have the league girl 2023-08-09
+            if(btnGirl === null) document.getElementById('leagues').classList.add('hidden_girl');
+
+            //hide league girl
             if(btnGirl !== null && !btnGirl.classList.contains('hidden_girl'))
             {
                 btnGirl.classList.add('hidden_girl');
