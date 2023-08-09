@@ -2,6 +2,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.4] - 2023-08-09
+
+### Added
+- Added fix for the KK bug when you have the league girl
+
 ## [0.3] - 2023-08-08
 
 ### Changed
