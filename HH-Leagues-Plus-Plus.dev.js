@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++
-// @version      0.6
+// @version      0.7
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/tower-of-fame.html
@@ -59,7 +59,17 @@
         css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons {flex-direction: row !important;}');
         css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons .battle-action-button.green_button_L {min-width: 50%;}');
         css.sheet.insertRule('#leagues .league_opponent .player-profile-picture {cursor:pointer !important;}');
-        css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="level"], #leagues .league_content .league_table .data-list .data-row .data-column[column="player_league_points"], #leagues .league_content .league_table .data-list .data-row .data-column[column="power"], #leagues .league_content .league_table .data-list .data-row .data-column[column="team"], #leagues .league_content .league_table .data-list .data-row .head-column[column="level"], #leagues .league_content .league_table .data-list .data-row .head-column[column="player_league_points"], #leagues .league_content .league_table .data-list .data-row .head-column[column="power"], #leagues .league_content .league_table .data-list .data-row .head-column[column="team"] { min-width: 2rem !important; }');
+        css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="level"], #leagues .league_content .league_table .data-list .data-row .data-column[column="player_league_points"], #leagues .league_content .league_table .data-list .data-row .data-column[column="power"], #leagues .league_content .league_table .data-list .data-row .data-column[column="team"], #leagues .league_content .league_table .data-list .data-row .head-column[column="level"], #leagues .league_content .league_table .data-list .data-row .head-column[column="player_league_points"], #leagues .league_content .league_table .data-list .data-row .head-column[column="power"], #leagues .league_content .league_table .data-list .data-row .head-column[column="team"] {
+  min-width: 2rem !important;
+}`);
+        css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="match_history"], #leagues .league_content .league_table .data-list .data-row .data-column[column="match_history_sorting"], #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history"], #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history_sorting"] {
+  min-width: 5.5rem !important;
+}`);
+        css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="match_history"] .result, #leagues .league_content .league_table .data-list .data-row .data-column[column="match_history_sorting"] .result, #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history"] .result, #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history_sorting"] .result {
+  width: 1.8rem !important;
+  height: 1.8rem !important;
+  line-height: 1.8rem !important;
+}`);
         css.sheet.insertRule(`#leagues.hidden_girl .league_opponent {
   position: absolute;
   right: 0;
