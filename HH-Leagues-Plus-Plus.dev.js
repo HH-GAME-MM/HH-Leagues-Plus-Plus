@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++
-// @version      0.7
+// @version      0.7.1
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/tower-of-fame.html
@@ -63,12 +63,12 @@
   min-width: 2rem !important;
 }`);
         css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="match_history"], #leagues .league_content .league_table .data-list .data-row .data-column[column="match_history_sorting"], #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history"], #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history_sorting"] {
-  min-width: 5.5rem !important;
+  min-width: 5.2rem !important;
 }`);
         css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="match_history"] .result, #leagues .league_content .league_table .data-list .data-row .data-column[column="match_history_sorting"] .result, #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history"] .result, #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history_sorting"] .result {
-  width: 1.8rem !important;
-  height: 1.8rem !important;
-  line-height: 1.8rem !important;
+  width: 1.7rem !important;
+  height: 1.7rem !important;
+  line-height: 1.7rem !important;
 }`);
         css.sheet.insertRule(`#leagues.hidden_girl .league_opponent {
   position: absolute;
