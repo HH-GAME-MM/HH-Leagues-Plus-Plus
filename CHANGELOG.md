@@ -2,6 +2,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.6] - 2023-08-10
+
+### Fixed
+- The script does not work when you are done with the league
+
 ## [0.4-0.5] - 2023-08-09
 
 ### Added
