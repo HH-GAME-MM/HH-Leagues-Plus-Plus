@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++
-// @version      0.5
+// @version      0.6
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/tower-of-fame.html
@@ -87,8 +87,10 @@
 
         //add a confirmation for the 15x button
         let btn = document.querySelector('#leagues .league_content .league_buttons .league_buttons_block .blue_button_L, #leagues .league_content .league_buttons .league_buttons_block .orange_button_L');
-        btn.parentNode.replaceChild(btn.cloneNode(true), btn);
-        addMultipleBattlesButtonClick();
+        if(btn !== null) {
+            btn.parentNode.replaceChild(btn.cloneNode(true), btn);
+            addMultipleBattlesButtonClick();
+        }
 
         //add change team button
         btn = document.createElement('a');
