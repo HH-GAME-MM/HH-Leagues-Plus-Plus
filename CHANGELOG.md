@@ -2,7 +2,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [0.8.0] - 2023-08-15
+## [0.8.0-0.8.1] - 2023-08-15
 
 ### Added
 - Remember last selected opponent
