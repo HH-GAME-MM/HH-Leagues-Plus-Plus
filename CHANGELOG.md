@@ -9,7 +9,7 @@ All notable changes to this project will be documented in this file.
 - Compatibility for the current code on the test server
 
 ### Fixed
-- League match history (x2/x3 button)
+- Match history (x2/x3 button)
 
 ## [0.6-0.7.1] - 2023-08-10
 
