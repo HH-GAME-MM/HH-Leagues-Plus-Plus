@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++
-// @version      0.8.0
+// @version      0.8.1
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/tower-of-fame.html
@@ -49,6 +49,7 @@
         css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .multiple-battles {height:43px !important;padding-top:6px !important;}');
         css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .blue_button_L, #leagues .league_content .league_buttons .league_buttons_block .orange_button_L { display:none !important; width: 116px !important; padding: 10px}');
         css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .changeTeam { margin-left:10px;font-size:12px;padding-left:16px !important }');
+        css.sheet.insertRule('#leagues .league_content .league_buttons .change_team_container #change_team {padding: 10px !important;}');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="match_history_sorting"] .result.unknown { background-image: linear-gradient(to top,#244922 0,#979f96 100%) }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] { column-gap: 3px; }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] .team-theme.icon { width:20px;height:20px }');
