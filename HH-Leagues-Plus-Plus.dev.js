@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++
-// @version      0.7.1
+// @version      0.8.0
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/tower-of-fame.html
@@ -49,13 +49,13 @@
         css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .multiple-battles {height:43px !important;padding-top:6px !important;}');
         css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .blue_button_L, #leagues .league_content .league_buttons .league_buttons_block .orange_button_L { display:none !important; width: 116px !important; padding: 10px}');
         css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .changeTeam { margin-left:10px;font-size:12px;padding-left:16px !important }');
-        css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="match_history"] .result.unknown { background-image: linear-gradient(to top,#244922 0,#979f96 100%) }');
+        css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="match_history_sorting"] .result.unknown { background-image: linear-gradient(to top,#244922 0,#979f96 100%) }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] { column-gap: 3px; }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] .team-theme.icon { width:20px;height:20px }');
         css.sheet.insertRule('#leagues .league_content {max-width:49rem !important;}');
         css.sheet.insertRule('#leagues .league_table .data-list .data-row.body-row.selected { background-color: rgba(254, 184, 37, .5) }');
         css.sheet.insertRule('#leagues .league_table .nicescroll-rails {right:15rem !important;}');
-        css.sheet.insertRule('#leagues.hidden_girl .league_opponent .player_team_block.opponent {padding-left:0.75rem !important;padding-right:0.75rem !important;}');
+        css.sheet.insertRule('#leagues .league_opponent .player_team_block.opponent {padding-left:0.75rem !important;padding-right:0.75rem !important;}');
         css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons {flex-direction: row !important;}');
         css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons .battle-action-button.green_button_L {min-width: 50%;}');
         css.sheet.insertRule('#leagues .league_opponent .player-profile-picture {cursor:pointer !important;}');
@@ -70,7 +70,8 @@
   height: 1.7rem !important;
   line-height: 1.7rem !important;
 }`);
-        css.sheet.insertRule(`#leagues.hidden_girl .league_opponent {
+        //temporary compatibility update for prod and test server 2023-08-14
+        css.sheet.insertRule(`#leagues.hidden_girl .league_opponent, #leagues .league_opponent.hidden_girl {
   position: absolute;
   right: 0;
   top: 0;
@@ -88,6 +89,15 @@
   min-width: 13rem;
   padding-top: 10px;
 }`);
+        //temporary compatibility update for prod and test server 2023-08-14
+        css.sheet.insertRule(`#change_team {
+  margin-left: 10px;
+  font-size: 12px;
+  padding-left: 16px !important;
+  width: 116px !important;
+  padding: 10px;
+  height: 43px !important;
+}`);
     }
 
     function TowerOfFame_run()
@@ -102,32 +112,59 @@
             addMultipleBattlesButtonClick();
         }
 
-        //add change team button
-        btn = document.createElement('a');
-        btn.setAttribute('class', 'blue_button_L changeTeam');
-        btn.innerHTML = '<div>Change team</div>';
-        btn.addEventListener("click", function() {
-            localStorage.setItem('battle_type', 'leagues');
-            localStorage.setItem('leagues_id', Hero.infos.id);
-            window.location.href = '/teams.html';
-        });
-        document.querySelector('.league_buttons_block').appendChild(btn);
+        //add change team button if none exists
+        if(document.getElementById('change_team') === null) //temporary compatibility update for prod and test server 2023-08-14
+        {
+            btn = document.createElement('a');
+            btn.setAttribute('class', 'blue_button_L changeTeam');
+            btn.innerHTML = '<div>Change team</div>';
+            btn.addEventListener("click", function() {
+                localStorage.setItem('battle_type', 'leagues');
+                localStorage.setItem('leagues_id', Hero.infos.id);
+                window.location.href = '/teams.html';
+            });
+            document.querySelector('.league_buttons_block').appendChild(btn);
+        }
 
         //show 15x button and change team button
         document.querySelectorAll('#leagues .league_content .league_buttons .league_buttons_block .blue_button_L, #leagues .league_content .league_buttons .league_buttons_block .orange_button_L').forEach((e) => e.setAttribute('style', 'display:block !important'));
 
         //add a div for the opponent view
-        let div = document.createElement('div');
+        const div = document.createElement('div');
         div.setAttribute('class', 'league_opponent');
         document.querySelector('#leagues').appendChild(div);
+
+        //sync css class hidden_girl from '#leagues div.league_girl' to '#leagues div.league_opponent'
+        //compatibility for prod and test server 2023-08-14
+        const leagueGirlNode = document.querySelector('#leagues div.league_girl');
+        const leagueGirlNodeObserver = new MutationObserver((mus) => {
+            mus.forEach(mu => {
+                if(mu.type !== 'attributes' || mu.attributeName !== 'class') return;
+                leagueGirlSync();
+            });
+        });
+        function leagueGirlSync() {
+            if(leagueGirlNode.classList.contains('hidden_girl')) {
+                div.classList.add('hidden_girl');
+            } else {
+                div.classList.remove('hidden_girl');
+            }
+        }
+        leagueGirlNodeObserver.observe(leagueGirlNode, {attributes: true});
+        leagueGirlSync();
 
         //modify data list and add click event to header column, as the event listeners and highlighting are lost during sorting
         $(".head-column").click(modifyDataList)
         modifyDataList();
 
-        //fix KK bug, if you have the league girl 2023-08-09
-        let btnGirl = document.getElementById('toggle_columns');
-        if(btnGirl === null) document.getElementById('leagues').classList.add('hidden_girl');
+        //select last opponent
+        let lastOpponentId = loadLastOpponentId();
+        if(lastOpponentId !== null)
+        {
+            let opponent = opponents_list_getData(lastOpponentId);
+            let opponentRow = getOpponentRow(lastOpponentId);
+            if(opponent !== null && opponentRow !== null) selectOpponent(opponentRow, opponent);
+        }
 
         function modifyDataList()
         {
@@ -178,21 +215,27 @@
                 }
 
                 //add a new event listener
-                opponentRows[i].addEventListener("click", (event) => selectOpponent(event, opponent));
+                opponentRows[i].addEventListener("click", (event) => selectOpponent(event.currentTarget, opponent));
 
                 //highlight row
                 if(currentOpponent === opponent) opponentRows[i].classList.add('selected');
             }
         }
 
-        function selectOpponent(event, opponent)
+        function selectOpponent(row, opponent)
         {
             //highlight row
             document.querySelectorAll('#leagues .league_table .data-list .data-row.body-row').forEach((e) => e.classList.remove('selected'))
-            event.currentTarget.classList.add('selected');
+            row.classList.add('selected');
 
             //show opponent
             showOpponent(opponent);
+
+            //hide league girl
+            hideLeagueGirl();
+
+            //save last selected opponent
+            saveLastOpponentId(opponent.player.id_fighter);
         }
 
         function showOpponent(opponent)
@@ -289,8 +332,6 @@
             }
             container.appendChild(btn3x);
 
-            hideLeagueGirl();
-
             //Run Battle Sim from HHPlusPlus Script
             HHPlusPlus_RunBattleSim(opponent, available_fights);
         }
@@ -363,10 +404,8 @@
         function hideLeagueGirl()
         {
             let btnGirl = document.getElementById('toggle_columns');
-            if(btnGirl !== null && !btnGirl.classList.contains('hidden_girl'))
-            {
-                btnGirl.classList.add('hidden_girl');
-                document.getElementById('leagues').classList.add('hidden_girl');
+            if(btnGirl !== null && !btnGirl.classList.contains('hidden_girl')) {
+                btnGirl.click();
             }
         }
 
@@ -384,7 +423,7 @@
                 }
 
                 //update match history
-                getOpponentColumn(opponent.player.id_fighter, 'match_history').innerHTML = match_history_html;
+                getOpponentColumn(opponent.player.id_fighter, 'match_history_sorting').innerHTML = match_history_html;
 
                 //remove "Go" button and event listeners
                 let canFightColumn = getOpponentColumn(opponent.player.id_fighter, 'can_fight');
@@ -422,6 +461,16 @@
             return null;
         }
 
+        function saveLastOpponentId(id)
+        {
+            localStorage.setItem('HHLeaguesPlusPlusLastOpponentId', id);
+        }
+
+        function loadLastOpponentId()
+        {
+            return localStorage.getItem('HHLeaguesPlusPlusLastOpponentId');
+        }
+
         //modified KK function, Code Line 27058 default.js v69097541 2023-08-03
         function addMultipleBattlesButtonClick() {
             $(".multiple-battles").on("click", function() {
@@ -442,6 +491,9 @@
 
     function Teams_run()
     {
+        //temporary compatibility update for prod and test server 2023-08-14
+        if(localStorageGetItem("leagues_id") === '') return;
+
         //remove event listeners
         let btn = $("#btn-select-team")[0];
         btn.parentNode.replaceChild(btn.cloneNode(true), btn);
