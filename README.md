@@ -12,6 +12,7 @@ Features:
 - Fade expired boosters
 - Confirmation for 15x button
 - Remember last selected opponent
+- Club member nicknames in green
 - bye bye pre-battle page 
 
 ![img](https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/assets/107755486/9264bbe5-3c5f-438f-95b3-832cc04bf3fb)
