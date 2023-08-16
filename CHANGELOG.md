@@ -2,6 +2,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.9.0] - 2023-08-16
+
+### Added
+- Club member nicknames in green
+
+### Changed
+- Code cleaned up
+
 ## [0.8.0-0.8.1] - 2023-08-15
 
 ### Added
