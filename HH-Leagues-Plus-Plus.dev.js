@@ -1,18 +1,13 @@
 // ==UserScript==
 // @name         HH Leagues++
-// @version      0.8.1
+// @version      0.9.0
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/tower-of-fame.html
-// @match        https://*.hentaiheroes.com/teams.html
 // @match        https://nutaku.haremheroes.com/tower-of-fame.html
-// @match        https://nutaku.haremheroes.com/teams.html
 // @match        https://*.comixharem.com/tower-of-fame.html
-// @match        https://*.comixharem.com/teams.html
 // @match        https://*.pornstarharem.com/tower-of-fame.html
-// @match        https://*.pornstarharem.com/teams.html
 // @match        https://*.gayharem.com/tower-of-fame.html
-// @match        https://*.gayharem.com/teams.html
 // @run-at       document-end
 // @namespace    https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus
 // @updateURL    https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/HH-Leagues-Plus-Plus.user.js
@@ -28,31 +23,21 @@
     'use strict';
     /*global Hero,GT,IMAGES_URL,opponents_list,buildPlayerBlock,hero_page_popup,loadingAnimation,hh_ajax,Reward,$*/
 
-    if(window.location.href.includes('.com/tower-of-fame.html'))
-    {
-        TowerOfFame_css();
-        setTimeout(TowerOfFame_run, 1);
-    }
-    else if(window.location.href.includes('.com/teams.html'))
-    {
-        setTimeout(Teams_run, 1);
-    }
+    TowerOfFame_css();
+    setTimeout(TowerOfFame_run, 1);
 
     function TowerOfFame_css()
     {
         let css = document.createElement('style');
         document.head.appendChild(css);
 
-        css.sheet.insertRule('.league_end_in { min-width: 110px }');
-        css.sheet.insertRule('#leagues .league_content .league_buttons {max-width:100% !important;}');
-        css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block {width:20.5rem !important;}');
         css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .multiple-battles {height:43px !important;padding-top:6px !important;}');
-        css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .blue_button_L, #leagues .league_content .league_buttons .league_buttons_block .orange_button_L { display:none !important; width: 116px !important; padding: 10px}');
-        css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .changeTeam { margin-left:10px;font-size:12px;padding-left:16px !important }');
-        css.sheet.insertRule('#leagues .league_content .league_buttons .change_team_container #change_team {padding: 10px !important;}');
+        css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .blue_button_L, #leagues .league_content .league_buttons .league_buttons_block .orange_button_L { width: 116px !important; padding: 10px; margin-right: 10px }');
+        css.sheet.insertRule('#leagues .league_content .league_buttons .change_team_container #change_team { width: 116px !important; height: 43px !important; margin-left: 10px; padding: 10px; !important; }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="match_history_sorting"] .result.unknown { background-image: linear-gradient(to top,#244922 0,#979f96 100%) }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] { column-gap: 3px; }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] .team-theme.icon { width:20px;height:20px }');
+        css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="nickname"].clubmate .nickname { color: #00CC00 }');
         css.sheet.insertRule('#leagues .league_content {max-width:49rem !important;}');
         css.sheet.insertRule('#leagues .league_table .data-list .data-row.body-row.selected { background-color: rgba(254, 184, 37, .5) }');
         css.sheet.insertRule('#leagues .league_table .nicescroll-rails {right:15rem !important;}');
@@ -71,8 +56,7 @@
   height: 1.7rem !important;
   line-height: 1.7rem !important;
 }`);
-        //temporary compatibility update for prod and test server 2023-08-14
-        css.sheet.insertRule(`#leagues.hidden_girl .league_opponent, #leagues .league_opponent.hidden_girl {
+        css.sheet.insertRule(`#leagues .league_opponent.hidden_girl {
   position: absolute;
   right: 0;
   top: 0;
@@ -90,15 +74,6 @@
   min-width: 13rem;
   padding-top: 10px;
 }`);
-        //temporary compatibility update for prod and test server 2023-08-14
-        css.sheet.insertRule(`#change_team {
-  margin-left: 10px;
-  font-size: 12px;
-  padding-left: 16px !important;
-  width: 116px !important;
-  padding: 10px;
-  height: 43px !important;
-}`);
     }
 
     function TowerOfFame_run()
@@ -113,30 +88,12 @@
             addMultipleBattlesButtonClick();
         }
 
-        //add change team button if none exists
-        if(document.getElementById('change_team') === null) //temporary compatibility update for prod and test server 2023-08-14
-        {
-            btn = document.createElement('a');
-            btn.setAttribute('class', 'blue_button_L changeTeam');
-            btn.innerHTML = '<div>Change team</div>';
-            btn.addEventListener("click", function() {
-                localStorage.setItem('battle_type', 'leagues');
-                localStorage.setItem('leagues_id', Hero.infos.id);
-                window.location.href = '/teams.html';
-            });
-            document.querySelector('.league_buttons_block').appendChild(btn);
-        }
-
-        //show 15x button and change team button
-        document.querySelectorAll('#leagues .league_content .league_buttons .league_buttons_block .blue_button_L, #leagues .league_content .league_buttons .league_buttons_block .orange_button_L').forEach((e) => e.setAttribute('style', 'display:block !important'));
-
         //add a div for the opponent view
         const div = document.createElement('div');
         div.setAttribute('class', 'league_opponent');
         document.querySelector('#leagues').appendChild(div);
 
         //sync css class hidden_girl from '#leagues div.league_girl' to '#leagues div.league_opponent'
-        //compatibility for prod and test server 2023-08-14
         const leagueGirlNode = document.querySelector('#leagues div.league_girl');
         const leagueGirlNodeObserver = new MutationObserver((mus) => {
             mus.forEach(mu => {
@@ -169,46 +126,42 @@
 
         function modifyDataList()
         {
-            //go through all rows, replace all event listeners and change the team column to the team theme
+            //go through all rows and add/change various things
             let opponentRows = document.querySelectorAll('#leagues .league_table .data-list .data-row.body-row');
             for(let i = 0; i < opponentRows.length; i++)
             {
-                let id = parseInt(opponentRows[i].querySelector('.data-column[column="nickname"] .nickname').getAttribute('id-member'));
+                let opponentRow = opponentRows[i];
+                let id = parseInt(opponentRow.querySelector('.data-column[column="nickname"] .nickname').getAttribute('id-member'));
                 let opponent = opponents_list_getData(id);
 
-                //remove event listeners for almost all columns
-                let columns = opponentRows[i].querySelectorAll('.data-column:not([column="can_fight"])');
-                for(let j = 0; j < columns.length; j++) {
+                //change team column to team theme (meanwhile also included in HH++)
+                let teamThemeHtml = '';
+                if (!opponent.player.team.theme_elements.length) {
+                    teamThemeHtml = '<img class="team-theme icon " src="' + IMAGES_URL + '/pictures/girls_elements/Multicolored.png" tooltip="' + GT.design.balanced_theme_flavor + '">'
+                } else {
+                    opponent.player.team.theme_elements.forEach((e) => {
+                        teamThemeHtml += '<img class="team-theme icon " src="' + e.ico_url + '" tooltip="' + e.flavor + '">'
+                    })
+                }
+                opponentRow.querySelector('.data-column[column="team"]').innerHTML = teamThemeHtml;
 
-                    //change team column to team theme
-                    if(columns[j].getAttribute('column') === 'team')
-                    {
-                        let teamThemeHtml = '';
-                        if (!opponent.player.team.theme_elements.length) {
-                            teamThemeHtml = '<img class="team-theme icon " src="' + IMAGES_URL + '/pictures/girls_elements/Multicolored.png" tooltip="' + GT.design.balanced_theme_flavor + '">'
-                        } else {
-                            opponent.player.team.theme_elements.forEach((e) => {
-                                teamThemeHtml += '<img class="team-theme icon " src="' + e.ico_url + '" tooltip="' + e.flavor + '">'
-                            })
+                //fade expired opponent boosters (meanwhile also included in HH++)
+                if(Hero.infos.id !== id)
+                {
+                    opponentRow.querySelector('.data-column[column="boosters"]').querySelectorAll('div[type=booster]').forEach((e) => {
+                        if (JSON.parse(e.getAttribute('data-d')).expiration === 0) {
+                            e.setAttribute('style', 'border:1px solid red;opacity:0.5');
                         }
-                        columns[j].innerHTML = teamThemeHtml;
-                    }
-
-                    //fade expired opponent boosters
-                    if(Hero.infos.id !== id && columns[j].getAttribute('column') === 'boosters')
-                    {
-                        columns[j].querySelectorAll('div[type=booster]').forEach((e) => {
-                            if (JSON.parse(e.getAttribute('data-d')).expiration === 0) {
-                                e.setAttribute('style', 'border:1px solid red;opacity:0.5');
-                            }
-                        });
-                    }
-
-                    columns[j].parentNode.replaceChild(columns[j].cloneNode(true), columns[j]);
+                    });
                 }
 
-                //remove the go_pre_battle class so that the code in addOpponentRowClick() no longer finds the button (compatibility for new code on test server)
-                let btnGo = opponentRows[i].querySelector('.data-column[column="can_fight"] .go_pre_battle');
+                //add clubmate class to column
+                if(Hero.infos.id !== id && Hero.club !== null && opponent.player.club !== null && Hero.club.id_club == opponent.player.club.id_club) {
+                    opponentRow.querySelector('.data-column[column="nickname"]').classList.add('clubmate');
+                }
+
+                //remove the go_pre_battle class so that the code in addOpponentRowClick() no longer finds the button
+                let btnGo = opponentRow.querySelector('.data-column[column="can_fight"] .go_pre_battle');
                 if(btnGo !== null)
                 {
                     btnGo.classList.remove('go_pre_battle');
@@ -216,10 +169,10 @@
                 }
 
                 //add a new event listener
-                opponentRows[i].addEventListener("click", (event) => selectOpponent(event.currentTarget, opponent));
+                opponentRow.addEventListener("click", (event) => selectOpponent(event.currentTarget, opponent));
 
                 //highlight row
-                if(currentOpponent === opponent) opponentRows[i].classList.add('selected');
+                if(currentOpponent === opponent) opponentRow.classList.add('selected');
             }
         }
 
@@ -333,7 +286,7 @@
             }
             container.appendChild(btn3x);
 
-            //Run Battle Sim from HHPlusPlus Script
+            //Run Battle Sim from HH++ Script
             HHPlusPlus_RunBattleSim(opponent, available_fights);
         }
 
@@ -384,7 +337,7 @@
                 window.opponent_fighter = loadedData.opponent_fighter;
             }
 
-            //HHPlusPlus Battle Sim
+            //HH++ Battle Sim
             //Sources: hh-plus-plus/src/modules/BattleSimulatorModule/index.js
             //Sources: hh-plus-plus/src/modules/BattleSimulatorModule/League.js
             let simManager = new window.HHPlusPlus.League;
@@ -486,53 +439,6 @@
                     var hc_price = $(this).attr("price");
                     hc_confirm(hc_price, startBattles)
                 }
-            })
-        }
-    }
-
-    function Teams_run()
-    {
-        //temporary compatibility update for prod and test server 2023-08-14
-        if(localStorageGetItem("leagues_id") === '') return;
-
-        //remove event listeners
-        let btn = $("#btn-select-team")[0];
-        btn.parentNode.replaceChild(btn.cloneNode(true), btn);
-
-        //add modified event listener
-        addSelectButtonClickEvent();
-
-        //modified KK function, Code Line 35652 default.js v69097541 2023-08-03
-        function addSelectButtonClickEvent() {
-            $("#btn-select-team").on("click", function(event) {
-                event.preventDefault();
-                let battle_type = localStorage.getItem('battle_type');
-                var params = {
-                    action: "select_team",
-                    id_team: document.querySelector('.team-slot-container.selected-team').getAttribute('data-id-team'),
-                    battle_type: battle_type
-                };
-                var redirectUrl = function redirectUrl(data) {
-                    if (data.redirect_url) {
-                        var url = data.redirect_url;
-                        if (battle_type === "trolls") {
-                            url += "?id_opponent=" + localStorageGetItem("troll_id")
-                        }
-                        if (battle_type === "pantheon") {
-                            url += "?id_opponent=" + localStorageGetItem("pantheon_id")
-                        }
-                        if (battle_type === "leagues") {
-                            let id_opponent = localStorageGetItem("leagues_id");
-                            if(id_opponent == Hero.infos.id) {
-                                url = "/tower-of-fame.html"
-                            } else {
-                                url = "/leagues-pre-battle.html?id_opponent=" + id_opponent
-                            }
-                        }
-                        return window.location.href = url
-                    }
-                };
-                hh_ajax(params, redirectUrl)
             })
         }
     }
