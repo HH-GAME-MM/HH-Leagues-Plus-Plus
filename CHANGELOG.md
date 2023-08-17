@@ -2,6 +2,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.9.1] - 2023-08-18
+
+### Added
+- Style Tweaks for the new Battle Sim
+
 ## [0.9.0] - 2023-08-16
 
 ### Added
