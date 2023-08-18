@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++
-// @version      0.9.2
+// @version      0.9.3
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/tower-of-fame.html
@@ -31,7 +31,7 @@
         let css = document.createElement('style');
         document.head.appendChild(css);
 
-        css.sheet.insertRule('#leagues .league_content .league_buttons .challenge_points .bar-wrap { width: 8rem !important; }');
+        css.sheet.insertRule('#leagues .league_content .league_buttons .challenge_points .bar-wrap { width: 9rem !important; }');
         css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .multiple-battles {height:43px !important;padding-top:6px !important;}');
         css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .blue_button_L, #leagues .league_content .league_buttons .league_buttons_block .orange_button_L { width: 116px !important; padding: 10px; margin-right: 10px }');
         css.sheet.insertRule('#leagues .league_content .league_buttons .change_team_container #change_team { width: 116px !important; height: 43px !important; margin-left: 10px; padding: 10px; !important; }');
