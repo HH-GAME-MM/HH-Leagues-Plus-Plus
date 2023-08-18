@@ -15,6 +15,4 @@ Features:
 - Club member nicknames in green
 - bye bye pre-battle page 
 
-![img](https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/assets/107755486/9264bbe5-3c5f-438f-95b3-832cc04bf3fb)
-
-![img](https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/assets/107755486/855c753a-dae1-4c84-be9e-ee703b16b2f6)
+![img](https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/assets/107755486/cd1ee67c-1f0f-4449-bbb9-f5c9c7a7dd02)
