@@ -2,6 +2,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.10.0] - 2023-08-21
+
+### Added
+- Using the live battle simulation data from HH++ (v1.38.0 or higher required)
+
+### Removed
+- Live battle simulation removed (now included in HH++)
+- Team theme column (meanwhile included in HH++)
+- Fade expired opponent boosters (meanwhile included in HH++)
+
 ## [0.9.4] - 2023-08-18
 
 ### Added
