@@ -4,7 +4,7 @@ Supported games: HH.com, Nutaku, CxH, PsH, GH
 
 Features:
 - ~~Opponent Team Theme Column~~ (meanwhile included in HH++)
-- ~~Change Team Button~~ (meanwhile included in HH++)
+- ~~Change Team Button~~ (meanwhile included in the game)
 - Opponent Preview
 - Open Hero Profile (click avatar)
 - Challenge x1 / Challenge x3
