@@ -3,13 +3,13 @@
 Supported games: HH.com, Nutaku, CxH, PsH, GH
 
 Features:
-- Opponent Team Element Column
-- Change Team Button
+- ~~Opponent Team Theme Column~~ (meanwhile included in HH++)
+- ~~Change Team Button~~ (meanwhile included in HH++)
 - Opponent Preview
 - Open Hero Profile (click avatar)
 - Challenge x1 / Challenge x3
-- Battle Simulator
-- Fade expired boosters
+- ~~Battle Simulator~~ (meanwhile included in HH++)
+- ~~Fade expired boosters~~ (meanwhile included in HH++)
 - Confirmation for 15x button
 - Remember last selected opponent
 - Club member nicknames in green
