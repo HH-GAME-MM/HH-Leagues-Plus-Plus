@@ -2,7 +2,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [0.10.0] - 2023-08-21
+## [0.10.1] - 2023-08-21
 
 ### Added
 - Using the live battle simulation data from HH++ (v1.38.0 or higher required)
