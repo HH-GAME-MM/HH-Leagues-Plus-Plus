@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++
-// @version      0.9.4
+// @version      0.10.0
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/tower-of-fame.html
@@ -133,6 +133,11 @@
             if(opponent !== null && opponentRow !== null) selectOpponent(opponentRow, opponent);
         }
 
+        //add an event listener for HH++ Sim Results (HH++ v1.38.0 or higher required)
+        $(document).on('league:sim-done', function() {
+            if(currentOpponent !== null) showOpponent(currentOpponent);
+        });
+
         function modifyDataList()
         {
             //go through all rows and add/change various things
@@ -142,27 +147,6 @@
                 let opponentRow = opponentRows[i];
                 let id = parseInt(opponentRow.querySelector('.data-column[column="nickname"] .nickname').getAttribute('id-member'));
                 let opponent = opponents_list_getData(id);
-
-                //change team column to team theme (meanwhile also included in HH++)
-                let teamThemeHtml = '';
-                if (!opponent.player.team.theme_elements.length) {
-                    teamThemeHtml = '<img class="team-theme icon " src="' + IMAGES_URL + '/pictures/girls_elements/Multicolored.png" tooltip="' + GT.design.balanced_theme_flavor + '">'
-                } else {
-                    opponent.player.team.theme_elements.forEach((e) => {
-                        teamThemeHtml += '<img class="team-theme icon " src="' + e.ico_url + '" tooltip="' + e.flavor + '">'
-                    })
-                }
-                opponentRow.querySelector('.data-column[column="team"]').innerHTML = teamThemeHtml;
-
-                //fade expired opponent boosters (meanwhile also included in HH++)
-                if(Hero.infos.id !== id)
-                {
-                    opponentRow.querySelector('.data-column[column="boosters"]').querySelectorAll('div[type=booster]').forEach((e) => {
-                        if (JSON.parse(e.getAttribute('data-d')).expiration === 0) {
-                            e.setAttribute('style', 'border:1px solid red;opacity:0.5');
-                        }
-                    });
-                }
 
                 //add clubmate class to column
                 if(Hero.infos.id !== id && Hero.club !== null && opponent.player.club !== null && Hero.club.id_club == opponent.player.club.id_club) {
@@ -303,61 +287,27 @@
         {
             if(!window.HHPlusPlus) return;
 
-            //use the snapshot data the first time and start a request to retrieve the actual data (only required for accurate battle sim)
-            if(!window.loadedLeagueData) window.loadedLeagueData = new Map();
-            let loadedData = window.loadedLeagueData.get(opponent_fighter.player.id_fighter);
-            if(loadedData == null)
+            //sim results from HH++ available? (HH++ v1.38.0 or higher required)
+            if(opponent_fighter.sim)
             {
-                //use snapshot data
-                window.hero_data = opponents_list_getData(Hero.infos.id).player;
-                window.opponent_fighter = opponent_fighter;
-
-                //retrieve the actual data only when fights are available
-                if(available_fights > 0)
-                {
-                    $.ajax({ url: '/leagues-pre-battle.html?id_opponent=' + opponent_fighter.player.id_fighter, success: function(data) {
-                        let html = (new DOMParser()).parseFromString(data, 'text/html');
-                        let scriptNodes = html.querySelectorAll('script:not([src])');
-                        for(let i = 0; i < scriptNodes.length; i++)
-                        {
-                            let script = scriptNodes[i].innerHTML.trimLeft();
-                            if(script.startsWith('var hero_data = {') && script.includes('var opponent_fighter = {'))
-                            {
-                                eval(script.replace('var hero_data = {', 'window.hero_data_tmp = {').replace('var opponent_fighter = {', 'window.opponent_fighter_tmp = {'));
-                                window.loadedLeagueData.set(opponent_fighter.player.id_fighter, {
-                                    hero_data: window.hero_data_tmp,
-                                    opponent_fighter: window.opponent_fighter_tmp
-                                });
-                                delete window.hero_data_tmp;
-                                delete window.opponent_fighter_tmp;
-
-                                //update opponent
-                                if(currentOpponent === opponent_fighter) showOpponent(opponent_fighter);
-                                return;
-                            }
-                        }
-                    }});
-                }
+                (new window.HHPlusPlus.League).display(opponent_fighter.sim);
             }
             else
             {
-                //use actual data
-                window.hero_data = loadedData.hero_data;
-                window.opponent_fighter = loadedData.opponent_fighter;
-            }
+                //use the snapshot data and wait for the actual data from HH++ (only required for accurate battle sim)
+                window.hero_data = opponents_list_getData(Hero.infos.id).player;
+                window.opponent_fighter = opponent_fighter;
 
-            //HH++ Battle Sim
-            //Sources: hh-plus-plus/src/modules/BattleSimulatorModule/index.js
-            //Sources: hh-plus-plus/src/modules/BattleSimulatorModule/League.js
-            let simManager = new window.HHPlusPlus.League;
-            const {player, opponent} = simManager.extract();
-            const simulator = new window.HHPlusPlus.Simulator({player, opponent});
-            const result = simulator.run();
-            simManager.display(result);
+                //HH++ Battle Sim
+                //Sources: hh-plus-plus/src/modules/BattleSimulatorModule/index.js
+                //Sources: hh-plus-plus/src/modules/BattleSimulatorModule/League.js
+                let simManager = new window.HHPlusPlus.League;
+                const {player, opponent} = simManager.extract();
+                const simulator = new window.HHPlusPlus.Simulator({player, opponent});
+                const result = simulator.run();
+                simManager.display(result);
 
-            //mark snapshot data with exclamation mark
-            if(loadedData == null)
-            {
+                //mark snapshot data with exclamation mark
                 document.querySelectorAll('#leagues .league_opponent .matchRating-value').forEach(function(e) {
                     e.innerHTML = '! ' + e.innerHTML + ' !';
                 });
