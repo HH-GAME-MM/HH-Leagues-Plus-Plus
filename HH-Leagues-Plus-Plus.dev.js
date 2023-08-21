@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++
-// @version      0.10.0
+// @version      0.10.1
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/tower-of-fame.html
@@ -251,28 +251,32 @@
 
                     loadingAnimation.start();
 
-                    //change referer
-                    window.history.replaceState(null, '', '/leagues-pre-battle.html?id_opponent='+opponent.player.id_fighter);
+                    //open battle page first
+                    $.ajax({ url: '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter, success: function(data) {
 
-                    let params = {
-                        action: "do_battles_leagues",
-                        id_opponent: opponent.player.id_fighter,
-                        number_of_battles: available_fights
-                    };
-                    hh_ajax(params, function(data) {
                         //change referer
-                        window.history.replaceState(null, '', '/tower-of-fame.html');
+                        window.history.replaceState(null, '', '/leagues-pre-battle.html?id_opponent='+opponent.player.id_fighter);
 
-                        //remove redirect
-                        data.rewards.redirectUrl = '';
+                        let params = {
+                            action: "do_battles_leagues",
+                            id_opponent: opponent.player.id_fighter,
+                            number_of_battles: available_fights
+                        };
+                        hh_ajax(params, function(data) {
+                            //change referer
+                            window.history.replaceState(null, '', '/tower-of-fame.html');
 
-                        loadingAnimation.stop();
-                        Reward.handlePopup(data.rewards);
-                        Hero.updates(data.hero_changes);
+                            //remove redirect
+                            data.rewards.redirectUrl = '';
 
-                        //fill match history to prevent further fights
-                        fillHistoryAndUpdateOpponentRow(opponent);
-                    })
+                            loadingAnimation.stop();
+                            Reward.handlePopup(data.rewards);
+                            Hero.updates(data.hero_changes);
+
+                            //fill match history to prevent further fights
+                            fillHistoryAndUpdateOpponentRow(opponent);
+                        })
+                    }});
                 });
             } else {
                 btn3x.setAttribute('disabled', 'disabled');
