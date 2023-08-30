@@ -6,7 +6,7 @@ All notable changes to this project will be documented in this file.
 
 ### Added
 - Refill feature added to the x1/x2/x3 buttons
-- Fill in logically assignable points (x3 75/74/10/9, x2 50/49/7/6) and when all fights have been logically won (green) or lost (red) in the match history
+- Fill in logically assignable points (x3 75/74/10/9, x2 50/49/7/6) and when x2/x3 fights have been logically all won (green) or lost (red) in the match history
 
 ### Fixed
 - The script sometimes did not work on very slow computers because the GUI was not yet ready
