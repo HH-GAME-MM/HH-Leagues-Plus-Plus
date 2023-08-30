@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++
-// @version      0.10.1
+// @version      0.11.0
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/tower-of-fame.html
@@ -21,7 +21,7 @@
 (function() {
     //definitions
     'use strict';
-    /*global Hero,GT,IMAGES_URL,opponents_list,buildPlayerBlock,hero_page_popup,loadingAnimation,hh_ajax,Reward,$*/
+    /*global Hero,GT,IMAGES_URL,opponents_list,buildPlayerBlock,hero_page_popup,loadingAnimation,hh_ajax,Reward,HHPopupManager,$*/
 
     TowerOfFame_css();
     setTimeout(TowerOfFame_run, 1);
@@ -87,6 +87,12 @@
 
     function TowerOfFame_run()
     {
+        //delay execution if the gui is not ready
+        if(document.querySelector('#leagues div.league_girl') === null) {
+            setTimeout(TowerOfFame_run, 50);
+            return;
+        }
+
         //vars
         let currentOpponent = null;
 
@@ -218,17 +224,8 @@
             let btn1x = document.createElement('div');
             btn1x.setAttribute('class', 'green_button_L battle-action-button league-single-battle-button');
             btn1x.innerHTML = '<div class="action-label">Challenge!</div><div class="action-cost"><div><span class="energy_challenge_icn"></span> x1</div></div>';
-            if(available_fights > 0 && Hero.energies.challenge.amount > 0) {
-                btn1x.addEventListener("click", function() {
-
-                    //disable the button on first click
-                    let $this = $(event.currentTarget);
-                    if($this.attr("disabled") === 'disabled') return;
-                    $this.attr("disabled", true);
-
-                    loadingAnimation.start();
-                    window.location.href = "/league-battle.html?number_of_battles=1&id_opponent=" + opponent.player.id_fighter
-                });
+            if(available_fights > 0) {
+                btn1x.addEventListener("click", (event) => btn1x_click(event.currentTarget, opponent));
             } else {
                 btn1x.setAttribute('disabled', 'disabled');
             }
@@ -238,46 +235,8 @@
             let btn3x = document.createElement('div');
             btn3x.setAttribute('class', 'green_button_L battle-action-button league-multiple-battle-button');
             btn3x.innerHTML = '<div class="action-label">Challenge!</div><div class="action-cost"><div><span class="energy_challenge_icn"></span> x'+(available_fights > 1 ? available_fights : 3)+'</div></div>';
-            if(available_fights > 1 && Hero.energies.challenge.amount > 1 && available_fights <= Hero.energies.challenge.amount) {
-                btn3x.addEventListener("click", function() {
-
-                    //disable the button on first click
-                    let $this = $(event.currentTarget);
-                    if($this.attr("disabled") === 'disabled') return;
-                    $this.attr("disabled", true);
-
-                    //disable the 1x button
-                    btn1x.setAttribute('disabled', 'disabled');
-
-                    loadingAnimation.start();
-
-                    //open battle page first
-                    $.ajax({ url: '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter, success: function(data) {
-
-                        //change referer
-                        window.history.replaceState(null, '', '/leagues-pre-battle.html?id_opponent='+opponent.player.id_fighter);
-
-                        let params = {
-                            action: "do_battles_leagues",
-                            id_opponent: opponent.player.id_fighter,
-                            number_of_battles: available_fights
-                        };
-                        hh_ajax(params, function(data) {
-                            //change referer
-                            window.history.replaceState(null, '', '/tower-of-fame.html');
-
-                            //remove redirect
-                            data.rewards.redirectUrl = '';
-
-                            loadingAnimation.stop();
-                            Reward.handlePopup(data.rewards);
-                            Hero.updates(data.hero_changes);
-
-                            //fill match history to prevent further fights
-                            fillHistoryAndUpdateOpponentRow(opponent);
-                        })
-                    }});
-                });
+            if(available_fights > 1) {
+                btn3x.addEventListener("click", (event) => btn3x_click(event.currentTarget, opponent, available_fights, btn1x));
             } else {
                 btn3x.setAttribute('disabled', 'disabled');
             }
@@ -285,6 +244,82 @@
 
             //Run Battle Sim from HH++ Script
             HHPlusPlus_RunBattleSim(opponent, available_fights);
+        }
+
+        function btn1x_click(btn, opponent)
+        {
+            if(Hero.energies.challenge.amount > 0)
+            {
+                //disable the button on first click
+                let $this = $(btn);
+                if($this.attr("disabled") === 'disabled') return;
+                $this.attr("disabled", true);
+
+                loadingAnimation.start();
+
+                //open the battle page first
+                $.ajax({ url: '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter, success: function(data) {
+
+                    window.location.href = "/league-battle.html?number_of_battles=1&id_opponent=" + opponent.player.id_fighter;
+                }});
+            }
+            else
+            {
+                HHPopupManager.show("no_energy_challenge", {
+                    energy: "challenge",
+                    needed: 1
+                }, () => btn1x_click(btn, opponent))
+            }
+        }
+
+        function btn3x_click(btn, opponent, available_fights, btn1x)
+        {
+            if(Hero.energies.challenge.amount >= available_fights)
+            {
+                //disable the button on first click
+                let $this = $(btn);
+                if($this.attr("disabled") === 'disabled') return;
+                $this.attr("disabled", true);
+
+                //disable the 1x button
+                btn1x.setAttribute('disabled', 'disabled');
+
+                loadingAnimation.start();
+
+                //open the battle page first
+                $.ajax({ url: '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter, success: function(data) {
+
+                    //change referer
+                    window.history.replaceState(null, '', '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter);
+
+                    let params = {
+                        action: "do_battles_leagues",
+                        id_opponent: opponent.player.id_fighter,
+                        number_of_battles: available_fights
+                    };
+                    hh_ajax(params, function(data) {
+                        //change referer
+                        window.history.replaceState(null, '', '/tower-of-fame.html');
+
+                        //remove redirect
+                        data.rewards.redirectUrl = '';
+
+                        loadingAnimation.stop();
+                        Reward.handlePopup(data.rewards);
+                        Hero.updates(data.hero_changes);
+
+                        //fill match history to prevent further fights
+                        fillHistoryAndUpdateOpponentRow(opponent, available_fights, data.rewards.heroChangesUpdate.league_points);
+                    })
+                }});
+            }
+            else
+            {
+                HHPopupManager.show("no_energy_challenge", {
+                    energy: "challenge",
+                    needed: available_fights - Hero.energies.challenge.amount
+                }, () => btn3x_click(btn, opponent, available_fights, btn1x))
+            }
         }
 
         function HHPlusPlus_RunBattleSim(opponent_fighter, available_fights)
@@ -326,14 +361,35 @@
             }
         }
 
-        function fillHistoryAndUpdateOpponentRow(opponent)
+        function fillHistoryAndUpdateOpponentRow(opponent, fights, pointsTotal)
         {
+            let keyPoints = 0;
+            if((fights === 3 && pointsTotal > 73 /*25+25+24*/) || (fights === 2 && pointsTotal > 48 /*25+24*/)) {
+                keyPoints = 25; //3x25 or 2x25 1x24
+            } else if((fights === 3 && pointsTotal < 11 /*3+3+4*/) || (fights === 2 && pointsTotal < 8 /*3+4*/)) {
+                keyPoints = 3; //3x3 or 2x3 1x4
+            }
+            let attacker_won = "unknown";
+            if((fights === 3 && pointsTotal > 63 /*25+25+13*/) || (fights === 2 && pointsTotal > 38 /*25+13*/)) {
+                attacker_won = "won"; //all fights won
+            } else if((fights === 3 && pointsTotal < 22 /*3+3+16*/) || (fights === 2 && pointsTotal < 19 /*3+16*/)) {
+                attacker_won = "lost"; //all fights lost
+            }
             if(opponent.match_history[parseInt(opponent.player.id_fighter)] !== false) {
                 let match_history_html = '';
                 for(let i = 0; i < 3; i++) {
                     let mh = opponent.match_history[parseInt(opponent.player.id_fighter)][i];
                     if(mh === null) {
-                        mh = opponent.match_history[parseInt(opponent.player.id_fighter)][i] = { attacker_won: "unknown", match_points: "?" };
+                        let match_points = "?";
+                        if(keyPoints !== 0) {
+                            if(i < 2) {
+                                match_points = keyPoints.toString();
+                                pointsTotal -= keyPoints;
+                            } else {
+                                match_points = pointsTotal.toString();
+                            }
+                        }
+                        mh = opponent.match_history[parseInt(opponent.player.id_fighter)][i] = { attacker_won, match_points };
                     }
 
                     match_history_html += '<div class="result ' + mh.attacker_won + '">' + mh.match_points + '</div>';
