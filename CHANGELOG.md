@@ -2,6 +2,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.11.0] - 2023-08-30
+
+### Added
+- Refill feature added to the x1/x2/x3 buttons
+- Fill in logically assignable points (x3 75/74/10/9, x2 50/49/7/6) and when all fights have been logically won (green) or lost (red) in the match history
+
+### Fixed
+- Delay script if the GUI is not ready (random problem with slow computers)
+- x1-fight did not work directly after an x3-fight (instead the page was refreshed once)
+
 ## [0.10.1] - 2023-08-21
 
 ### Added
