@@ -2,6 +2,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.11.1] - 2023-08-31
+
+### Changed
+- Improved logic for won (green) or lost (red) fights in the match history
+
 ## [0.11.0] - 2023-08-30
 
 ### Added
