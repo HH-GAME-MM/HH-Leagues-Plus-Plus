@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++
-// @version      0.11.0
+// @version      0.11.1
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/tower-of-fame.html
@@ -34,7 +34,6 @@
         css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .multiple-battles {height:43px !important;padding-top:6px !important;}');
         css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .blue_button_L, #leagues .league_content .league_buttons .league_buttons_block .orange_button_L { width: 116px !important; padding: 10px; margin-right: 10px }');
         css.sheet.insertRule('#leagues .league_content .league_buttons .change_team_container #change_team { width: 116px !important; height: 43px !important; margin-left: 10px; padding: 10px; !important; }');
-        css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="match_history_sorting"] .result.unknown { background-image: linear-gradient(to top,#244922 0,#979f96 100%) }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] { column-gap: 3px; }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] .team-theme.icon { width:20px;height:20px }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="nickname"].clubmate .nickname { color: #00CC00 }');
@@ -308,8 +307,16 @@
                         Reward.handlePopup(data.rewards);
                         Hero.updates(data.hero_changes);
 
+                        let lostFights = 0;
+                        for (const reward of data.rewards.data.rewards) {
+                            if(reward.type === 'battle_lost') {
+                                lostFights = reward.value;
+                                break;
+                            }
+                        }
+
                         //fill match history to prevent further fights
-                        fillHistoryAndUpdateOpponentRow(opponent, available_fights, data.rewards.heroChangesUpdate.league_points);
+                        fillHistoryAndUpdateOpponentRow(opponent, available_fights, lostFights, data.rewards.heroChangesUpdate.league_points);
                     })
                 }});
             }
@@ -361,7 +368,7 @@
             }
         }
 
-        function fillHistoryAndUpdateOpponentRow(opponent, fights, pointsTotal)
+        function fillHistoryAndUpdateOpponentRow(opponent, fights, lostFights, pointsTotal)
         {
             let keyPoints = 0;
             if((fights === 3 && pointsTotal > 73 /*25+25+24*/) || (fights === 2 && pointsTotal > 48 /*25+24*/)) {
@@ -369,17 +376,12 @@
             } else if((fights === 3 && pointsTotal < 11 /*3+3+4*/) || (fights === 2 && pointsTotal < 8 /*3+4*/)) {
                 keyPoints = 3; //3x3 or 2x3 1x4
             }
-            let attacker_won = "unknown";
-            if((fights === 3 && pointsTotal > 63 /*25+25+13*/) || (fights === 2 && pointsTotal > 38 /*25+13*/)) {
-                attacker_won = "won"; //all fights won
-            } else if((fights === 3 && pointsTotal < 22 /*3+3+16*/) || (fights === 2 && pointsTotal < 19 /*3+16*/)) {
-                attacker_won = "lost"; //all fights lost
-            }
             if(opponent.match_history[parseInt(opponent.player.id_fighter)] !== false) {
                 let match_history_html = '';
                 for(let i = 0; i < 3; i++) {
                     let mh = opponent.match_history[parseInt(opponent.player.id_fighter)][i];
                     if(mh === null) {
+                        const attacker_won = (lostFights > 2 - i ? "lost" : "won");
                         let match_points = "?";
                         if(keyPoints !== 0) {
                             if(i < 2) {
