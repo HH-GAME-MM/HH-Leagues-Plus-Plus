@@ -5,7 +5,7 @@ All notable changes to this project will be documented in this file.
 ## [0.12.0] - 2023-11-02
 
 ### Added
-- The Challenge x1 button now works directly on the league page. The Battle Sequence is skipped. If someone wants to see the Battle Sequence, they can still see it via the "Go" button
+- The Challenge x1 button now works directly on the league page. The Battle Sequence is skipped (if someone wants to see the Battle Sequence, they can still do so via the "Go" button)
 
 ### Changed
 - Some CSS updates (e.g. Change Team button)
