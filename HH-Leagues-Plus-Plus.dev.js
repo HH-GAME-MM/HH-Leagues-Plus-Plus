@@ -1,13 +1,13 @@
 // ==UserScript==
-// @name         HH Leagues++
-// @version      0.11.1
+// @name         HH Leagues++ (Dev Version)
+// @version      0.12.0
 // @description  Upgrade League with various features
 // @author       -MM-
-// @match        https://*.hentaiheroes.com/tower-of-fame.html
-// @match        https://nutaku.haremheroes.com/tower-of-fame.html
-// @match        https://*.comixharem.com/tower-of-fame.html
-// @match        https://*.pornstarharem.com/tower-of-fame.html
-// @match        https://*.gayharem.com/tower-of-fame.html
+// @match        https://*.hentaiheroes.com/tower-of-fame.html*
+// @match        https://nutaku.haremheroes.com/tower-of-fame.html*
+// @match        https://*.comixharem.com/tower-of-fame.html*
+// @match        https://*.pornstarharem.com/tower-of-fame.html*
+// @match        https://*.gayharem.com/tower-of-fame.html*
 // @run-at       document-end
 // @namespace    https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus
 // @updateURL    https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/HH-Leagues-Plus-Plus.user.js
@@ -31,19 +31,20 @@
         let css = document.createElement('style');
         document.head.appendChild(css);
 
-        css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .multiple-battles {height:43px !important;padding-top:6px !important;}');
-        css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .blue_button_L, #leagues .league_content .league_buttons .league_buttons_block .orange_button_L { width: 116px !important; padding: 10px; margin-right: 10px }');
-        css.sheet.insertRule('#leagues .league_content .league_buttons .change_team_container #change_team { width: 116px !important; height: 43px !important; margin-left: 10px; padding: 10px; !important; }');
+        css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .multiple-battles { min-width:6.7rem; min-height:54px; margin-right:10px }');
+        css.sheet.insertRule('#leagues .league_content .league_buttons .change_team_container #change_team { min-width:6.7rem; height:54px; }');
+        css.sheet.insertRule('#leagues .league_content .league_buttons .change_team_container #change_team div { height:100%; display:flex; justify-content:center; align-items:center }');
+        css.sheet.insertRule('#leagues .league_content .league_buttons .league_end_in div p { max-width: 6.5rem; line-height:1; }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] { column-gap: 3px; }');
-        css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] .team-theme.icon { width:20px;height:20px }');
+        css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] .team-theme.icon { width:20px; height:20px }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="nickname"].clubmate .nickname { color: #00CC00 }');
-        css.sheet.insertRule('#leagues .league_content {max-width:49rem !important;}');
+        css.sheet.insertRule('#leagues .league_content {max-width:49rem !important}');
         css.sheet.insertRule('#leagues .league_table .data-list .data-row.body-row.selected { background-color: rgba(254, 184, 37, .5) }');
-        css.sheet.insertRule('#leagues .league_table .nicescroll-rails {right:15rem !important;}');
-        css.sheet.insertRule('#leagues .league_opponent .player_team_block.opponent {padding-left:0.75rem !important;padding-right:0.75rem !important;}');
-        css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons {flex-direction: row !important;}');
-        css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons .battle-action-button.green_button_L {min-width: 50%;}');
-        css.sheet.insertRule('#leagues .league_opponent .player-profile-picture {cursor:pointer !important;}');
+        css.sheet.insertRule('#leagues .league_table .nicescroll-rails {right:15rem !important}');
+        css.sheet.insertRule('#leagues .league_opponent .player_team_block.opponent {padding-left:0.75rem !important;padding-right:0.75rem !important}');
+        css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons {flex-direction: row !important}');
+        css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons .battle-action-button.green_button_L {min-width: 50%}');
+        css.sheet.insertRule('#leagues .league_opponent .player-profile-picture {cursor:pointer !important}');
         css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="level"], #leagues .league_content .league_table .data-list .data-row .head-column[column="level"], #leagues .league_content .league_table .data-list .data-row .data-column[column="place"], #leagues .league_content .league_table .data-list .data-row .head-column[column="place"] {
   min-width: 1.4rem !important;
 }`);
@@ -219,69 +220,43 @@
             //button container
             let container = document.querySelector('#leagues .league_opponent .player-panel-buttons');
 
-            //1x
+            //1x/3x buttons
             let btn1x = document.createElement('div');
+            let btn3x = document.createElement('div');
             btn1x.setAttribute('class', 'green_button_L battle-action-button league-single-battle-button');
-            btn1x.innerHTML = '<div class="action-label">Challenge!</div><div class="action-cost"><div><span class="energy_challenge_icn"></span> x1</div></div>';
+            btn3x.setAttribute('class', 'green_button_L battle-action-button league-multiple-battle-button');
+            btn1x.innerHTML = buildChallengeButtonInnerHtml(1);
+            btn3x.innerHTML = buildChallengeButtonInnerHtml(available_fights > 1 ? available_fights : 3);
             if(available_fights > 0) {
-                btn1x.addEventListener("click", (event) => btn1x_click(event.currentTarget, opponent));
+                btn1x.addEventListener("click", (event) => btnChallenge_click(btn1x, btn3x, opponent, 1));
             } else {
                 btn1x.setAttribute('disabled', 'disabled');
             }
-            container.appendChild(btn1x);
-
-            //3x
-            let btn3x = document.createElement('div');
-            btn3x.setAttribute('class', 'green_button_L battle-action-button league-multiple-battle-button');
-            btn3x.innerHTML = '<div class="action-label">Challenge!</div><div class="action-cost"><div><span class="energy_challenge_icn"></span> x'+(available_fights > 1 ? available_fights : 3)+'</div></div>';
             if(available_fights > 1) {
-                btn3x.addEventListener("click", (event) => btn3x_click(event.currentTarget, opponent, available_fights, btn1x));
+                btn3x.addEventListener("click", (event) => btnChallenge_click(btn1x, btn3x, opponent, available_fights));
             } else {
                 btn3x.setAttribute('disabled', 'disabled');
             }
+            container.appendChild(btn1x);
             container.appendChild(btn3x);
 
             //Run Battle Sim from HH++ Script
             HHPlusPlus_RunBattleSim(opponent, available_fights);
         }
 
-        function btn1x_click(btn, opponent)
+        function btnChallenge_click(btn1x, btn3x, opponent, fights)
         {
-            if(Hero.energies.challenge.amount > 0)
+            if(Hero.energies.challenge.amount >= fights)
             {
-                //disable the button on first click
-                let $this = $(btn);
-                if($this.attr("disabled") === 'disabled') return;
-                $this.attr("disabled", true);
-
-                loadingAnimation.start();
-
-                //open the battle page first
-                $.ajax({ url: '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter, success: function(data) {
-
-                    window.location.href = "/league-battle.html?number_of_battles=1&id_opponent=" + opponent.player.id_fighter;
-                }});
-            }
-            else
-            {
-                HHPopupManager.show("no_energy_challenge", {
-                    energy: "challenge",
-                    needed: 1
-                }, () => btn1x_click(btn, opponent))
-            }
-        }
-
-        function btn3x_click(btn, opponent, available_fights, btn1x)
-        {
-            if(Hero.energies.challenge.amount >= available_fights)
-            {
-                //disable the button on first click
-                let $this = $(btn);
-                if($this.attr("disabled") === 'disabled') return;
-                $this.attr("disabled", true);
-
-                //disable the 1x button
+                //disable the buttons and remove the event listeners
                 btn1x.setAttribute('disabled', 'disabled');
+                btn3x.setAttribute('disabled', 'disabled');
+                const btn1xClone = btn1x.cloneNode(true);
+                const btn3xClone = btn3x.cloneNode(true);
+                btn1x.parentNode.replaceChild(btn1xClone, btn1x);
+                btn3x.parentNode.replaceChild(btn3xClone, btn3x);
+                btn1x = btn1xClone;
+                btn3x = btn3xClone;
 
                 loadingAnimation.start();
 
@@ -289,12 +264,12 @@
                 $.ajax({ url: '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter, success: function(data) {
 
                     //change referer
-                    window.history.replaceState(null, '', '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter);
+                    window.history.replaceState(null, '', fights === 1 ? '/league-battle.html?number_of_battles=1&id_opponent=' + opponent.player.id_fighter : '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter);
 
                     let params = {
                         action: "do_battles_leagues",
                         id_opponent: opponent.player.id_fighter,
-                        number_of_battles: available_fights
+                        number_of_battles: fights
                     };
                     hh_ajax(params, function(data) {
                         //change referer
@@ -316,7 +291,20 @@
                         }
 
                         //fill match history to prevent further fights
-                        fillHistoryAndUpdateOpponentRow(opponent, available_fights, lostFights, data.rewards.heroChangesUpdate.league_points);
+                        const available_fights = fillHistoryAndUpdateOpponentRow(opponent, fights, lostFights, data.rewards.heroChangesUpdate.league_points);
+
+                        //update 1x/3x buttons
+                        if(available_fights > 0)
+                        {
+                            btn1x.removeAttribute('disabled');
+                            btn1x.addEventListener("click", (event) => btnChallenge_click(btn1x, btn3x, opponent, 1));
+
+                            if(available_fights > 1) {
+                                btn3x.innerHTML = buildChallengeButtonInnerHtml(available_fights);
+                                btn3x.removeAttribute('disabled');
+                                btn3x.addEventListener("click", (event) => btnChallenge_click(btn1x, btn3x, opponent, available_fights));
+                            }
+                        }
                     })
                 }});
             }
@@ -324,9 +312,71 @@
             {
                 HHPopupManager.show("no_energy_challenge", {
                     energy: "challenge",
-                    needed: available_fights - Hero.energies.challenge.amount
-                }, () => btn3x_click(btn, opponent, available_fights, btn1x))
+                    needed: fights - Hero.energies.challenge.amount
+                }, () => btnChallenge_click(btn1x, btn3x, opponent, fights))
             }
+        }
+
+        function fillHistoryAndUpdateOpponentRow(opponent, fights, lostFights, pointsTotal)
+        {
+            let keyPoints = 0;
+            if((fights === 3 && pointsTotal > 73 /*25+25+24*/) || (fights === 2 && pointsTotal > 48 /*25+24*/)) {
+                keyPoints = 25; //3x25 or 2x25 1x24
+            } else if((fights === 3 && pointsTotal < 11 /*3+3+4*/) || (fights === 2 && pointsTotal < 8 /*3+4*/)) {
+                keyPoints = 3; //3x3 or 2x3 1x4
+            }
+            let available_fights = 3;
+            if(opponent.match_history[parseInt(opponent.player.id_fighter)] !== false) {
+                let match_history_html = '';
+                for(let i = 0; i < 3; i++) {
+                    let mh = opponent.match_history[parseInt(opponent.player.id_fighter)][i];
+                    if(mh === null && fights !== 0) {
+                        let attacker_won;
+                        let match_points;
+                        if(fights > 1) {
+                            attacker_won = (lostFights > 2 - i ? "lost" : "won");
+                            match_points = "?";
+                            if(keyPoints !== 0) {
+                                if(i < 2) {
+                                    match_points = keyPoints.toString();
+                                    pointsTotal -= keyPoints;
+                                } else {
+                                    match_points = pointsTotal.toString();
+                                }
+                            }
+                        } else {
+                            attacker_won = (lostFights === 1 ? "lost" : "won");
+                            match_points = pointsTotal.toString();
+                            fights = 0;
+                        }
+                        mh = opponent.match_history[parseInt(opponent.player.id_fighter)][i] = { attacker_won, match_points };
+                    }
+
+                    if(mh !== null) {
+                        available_fights--;
+                        match_history_html += '<div class="result ' + mh.attacker_won + '">' + mh.match_points + '</div>';
+                    } else {
+                        match_history_html += '<div class="result"></div>';
+                    }
+                }
+
+                //update match history
+                getOpponentColumn(opponent.player.id_fighter, 'match_history_sorting').innerHTML = match_history_html;
+
+                //remove "Go" button and event listeners when no more fights are available
+                if(available_fights === 0)
+                {
+                    let canFightColumn = getOpponentColumn(opponent.player.id_fighter, 'can_fight');
+                    canFightColumn.innerHTML = '';
+                    canFightColumn.parentNode.replaceChild(canFightColumn.cloneNode(true), canFightColumn);
+                }
+                return available_fights;
+            }
+        }
+
+        function buildChallengeButtonInnerHtml(available_fights)
+        {
+            return '<div class="action-label">Challenge!</div><div class="action-cost"><div><span class="energy_challenge_icn"></span> x'+available_fights+'</div></div>';
         }
 
         function HHPlusPlus_RunBattleSim(opponent_fighter, available_fights)
@@ -365,45 +415,6 @@
             let btnGirl = document.getElementById('toggle_columns');
             if(btnGirl !== null && !btnGirl.classList.contains('hidden_girl')) {
                 btnGirl.click();
-            }
-        }
-
-        function fillHistoryAndUpdateOpponentRow(opponent, fights, lostFights, pointsTotal)
-        {
-            let keyPoints = 0;
-            if((fights === 3 && pointsTotal > 73 /*25+25+24*/) || (fights === 2 && pointsTotal > 48 /*25+24*/)) {
-                keyPoints = 25; //3x25 or 2x25 1x24
-            } else if((fights === 3 && pointsTotal < 11 /*3+3+4*/) || (fights === 2 && pointsTotal < 8 /*3+4*/)) {
-                keyPoints = 3; //3x3 or 2x3 1x4
-            }
-            if(opponent.match_history[parseInt(opponent.player.id_fighter)] !== false) {
-                let match_history_html = '';
-                for(let i = 0; i < 3; i++) {
-                    let mh = opponent.match_history[parseInt(opponent.player.id_fighter)][i];
-                    if(mh === null) {
-                        const attacker_won = (lostFights > 2 - i ? "lost" : "won");
-                        let match_points = "?";
-                        if(keyPoints !== 0) {
-                            if(i < 2) {
-                                match_points = keyPoints.toString();
-                                pointsTotal -= keyPoints;
-                            } else {
-                                match_points = pointsTotal.toString();
-                            }
-                        }
-                        mh = opponent.match_history[parseInt(opponent.player.id_fighter)][i] = { attacker_won, match_points };
-                    }
-
-                    match_history_html += '<div class="result ' + mh.attacker_won + '">' + mh.match_points + '</div>';
-                }
-
-                //update match history
-                getOpponentColumn(opponent.player.id_fighter, 'match_history_sorting').innerHTML = match_history_html;
-
-                //remove "Go" button and event listeners
-                let canFightColumn = getOpponentColumn(opponent.player.id_fighter, 'can_fight');
-                canFightColumn.innerHTML = '';
-                canFightColumn.parentNode.replaceChild(canFightColumn.cloneNode(true), canFightColumn);
             }
         }
 
