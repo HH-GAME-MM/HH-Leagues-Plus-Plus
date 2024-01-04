@@ -2,6 +2,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.12.1] - 2024-01-04
+
+### Added
+- Style improvements to make the player row more legible when it is selected and/or at the top of the table
+
 ## [0.12.0] - 2023-11-02
 
 ### Added
