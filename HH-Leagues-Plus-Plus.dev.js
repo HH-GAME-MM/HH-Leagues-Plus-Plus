@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++ (Dev Version)
-// @version      0.12.0
+// @version      0.12.1
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/tower-of-fame.html*
@@ -31,52 +31,75 @@
         let css = document.createElement('style');
         document.head.appendChild(css);
 
-        css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .multiple-battles { min-width:6.7rem; min-height:54px; margin-right:10px }');
-        css.sheet.insertRule('#leagues .league_content .league_buttons .change_team_container #change_team { min-width:6.7rem; height:54px; }');
-        css.sheet.insertRule('#leagues .league_content .league_buttons .change_team_container #change_team div { height:100%; display:flex; justify-content:center; align-items:center }');
-        css.sheet.insertRule('#leagues .league_content .league_buttons .league_end_in div p { max-width: 6.5rem; line-height:1; }');
+        css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .multiple-battles { min-width: 6.7rem; min-height: 54px; margin-right: 10px; }');
+        css.sheet.insertRule('#leagues .league_content .league_buttons .change_team_container #change_team { min-width: 6.7rem; height: 54px; }');
+        css.sheet.insertRule('#leagues .league_content .league_buttons .change_team_container #change_team div { height: 100%; display: flex; justify-content: center; align-items: center; }');
+        css.sheet.insertRule('#leagues .league_content .league_buttons .league_end_in div p { max-width: 6.5rem; line-height: 1; }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] { column-gap: 3px; }');
-        css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] .team-theme.icon { width:20px; height:20px }');
-        css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="nickname"].clubmate .nickname { color: #00CC00 }');
-        css.sheet.insertRule('#leagues .league_content {max-width:49rem !important}');
-        css.sheet.insertRule('#leagues .league_table .data-list .data-row.body-row.selected { background-color: rgba(254, 184, 37, .5) }');
+        css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="team"] .team-theme.icon { width: 20px; height: 20px; }');
+        css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="nickname"].clubmate .nickname { color: #00CC00; }');
+        css.sheet.insertRule('#leagues .league_content { max-width: 49rem !important; }');
+        css.sheet.insertRule('#leagues .league_table .data-list .data-row.body-row.selected { background-color: rgb(158, 108, 37); }');
+        css.sheet.insertRule('#leagues .league_table .data-list .data-row.body-row.player-row.selected { text-shadow: rgb(0, 0, 0) 1px 1px 0px, rgb(0, 0, 0) -1px 1px 0px, rgb(0, 0, 0) -1px -1px 0px, rgb(0, 0, 0) 1px -1px 0px; }');
+        css.sheet.insertRule(`#leagues .league_table .data-list .data-row.body-row.player-row.selected .data-column[column="boosters"],
+                              #leagues .league_table .data-list .data-row.body-row.player-row.selected .data-column[column="team"],
+                              #leagues .league_table .data-list .data-row.body-row.player-row.selected .data-column[column="value"],
+                              #leagues .league_table .data-list .data-row.body-row.player-row.selected .head-column[column="boosters"],
+                              #leagues .league_table .data-list .data-row.body-row.player-row.selected .head-column[column="team"],
+                              #leagues .league_table .data-list .data-row.body-row.player-row.selected .head-column[column="value"] {
+                                  transition: none;
+                              }`);
         css.sheet.insertRule('#leagues .league_table .nicescroll-rails {right:15rem !important}');
         css.sheet.insertRule('#leagues .league_opponent .player_team_block.opponent {padding-left:0.75rem !important;padding-right:0.75rem !important}');
         css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons {flex-direction: row !important}');
         css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons .battle-action-button.green_button_L {min-width: 50%}');
         css.sheet.insertRule('#leagues .league_opponent .player-profile-picture {cursor:pointer !important}');
-        css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="level"], #leagues .league_content .league_table .data-list .data-row .head-column[column="level"], #leagues .league_content .league_table .data-list .data-row .data-column[column="place"], #leagues .league_content .league_table .data-list .data-row .head-column[column="place"] {
-  min-width: 1.4rem !important;
-}`);
-        css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="player_league_points"], #leagues .league_content .league_table .data-list .data-row .data-column[column="power"], #leagues .league_content .league_table .data-list .data-row .data-column[column="team"], #leagues .league_content .league_table .data-list .data-row .head-column[column="player_league_points"], #leagues .league_content .league_table .data-list .data-row .head-column[column="power"], #leagues .league_content .league_table .data-list .data-row .head-column[column="team"] {
-  min-width: 2rem !important;
-}`);
-        css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="match_history"], #leagues .league_content .league_table .data-list .data-row .data-column[column="match_history_sorting"], #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history"], #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history_sorting"] {
-  min-width: 5.2rem !important;
-}`);
-        css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="match_history"] .result, #leagues .league_content .league_table .data-list .data-row .data-column[column="match_history_sorting"] .result, #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history"] .result, #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history_sorting"] .result {
-  width: 1.7rem !important;
-  height: 1.7rem !important;
-  line-height: 1.7rem !important;
-}`);
+        css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="level"],
+                              #leagues .league_content .league_table .data-list .data-row .head-column[column="level"],
+                              #leagues .league_content .league_table .data-list .data-row .data-column[column="place"],
+                              #leagues .league_content .league_table .data-list .data-row .head-column[column="place"] {
+                                  min-width: 1.4rem !important;
+                              }`);
+        css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="player_league_points"],
+                              #leagues .league_content .league_table .data-list .data-row .data-column[column="power"],
+                              #leagues .league_content .league_table .data-list .data-row .data-column[column="team"],
+                              #leagues .league_content .league_table .data-list .data-row .head-column[column="player_league_points"],
+                              #leagues .league_content .league_table .data-list .data-row .head-column[column="power"],
+                              #leagues .league_content .league_table .data-list .data-row .head-column[column="team"] {
+                                  min-width: 2rem !important;
+                              }`);
+        css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="match_history"],
+                              #leagues .league_content .league_table .data-list .data-row .data-column[column="match_history_sorting"],
+                              #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history"],
+                              #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history_sorting"] {
+                                  min-width: 5.2rem !important;
+                              }`);
+        css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="match_history"] .result,
+                              #leagues .league_content .league_table .data-list .data-row .data-column[column="match_history_sorting"] .result,
+                              #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history"] .result,
+                              #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history_sorting"] .result {
+                                  width: 1.7rem !important;
+                                  height: 1.7rem !important;
+                                  line-height: 1.7rem !important;
+                              }`);
         css.sheet.insertRule(`#leagues .league_opponent.hidden_girl {
-  position: absolute;
-  right: 0;
-  top: 0;
-  height: 100%;
-  width: 15rem;
-  transition: all .5s;
-  opacity: 1;
-  padding-top: 10px;
-}`);
+                                  position: absolute;
+                                  right: 0;
+                                  top: 0;
+                                  height: 100%;
+                                  width: 15rem;
+                                  transition: all .5s;
+                                  opacity: 1;
+                                  padding-top: 10px;
+                              }`);
         css.sheet.insertRule(`#leagues .league_opponent {
-  position: absolute;
-  opacity: 0;
-  right: -13rem;
-  width: 15rem;
-  min-width: 13rem;
-  padding-top: 10px;
-}`);
+                                  position: absolute;
+                                  opacity: 0;
+                                  right: -13rem;
+                                  width: 15rem;
+                                  min-width: 13rem;
+                                  padding-top: 10px;
+                              }`);
 
         //HH++ Sim Results
         css.sheet.insertRule('#leagues .matchRating { display: block; }');
