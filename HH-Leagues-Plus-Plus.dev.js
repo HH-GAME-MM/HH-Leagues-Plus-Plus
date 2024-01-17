@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name         HH Leagues++ (Dev Version)
-// @version      0.12.1
+// @version      0.12.2
 // @description  Upgrade League with various features
 // @author       -MM-
-// @match        https://*.hentaiheroes.com/tower-of-fame.html*
-// @match        https://nutaku.haremheroes.com/tower-of-fame.html*
-// @match        https://*.comixharem.com/tower-of-fame.html*
-// @match        https://*.pornstarharem.com/tower-of-fame.html*
-// @match        https://*.gayharem.com/tower-of-fame.html*
+// @match        https://*.hentaiheroes.com/leagues.html*
+// @match        https://nutaku.haremheroes.com/leagues.html*
+// @match        https://*.comixharem.com/leagues.html*
+// @match        https://*.pornstarharem.com/leagues.html*
+// @match        https://*.gayharem.com/leagues.html*
 // @run-at       document-end
 // @namespace    https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus
 // @updateURL    https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/HH-Leagues-Plus-Plus.user.js
@@ -296,7 +296,7 @@
                     };
                     hh_ajax(params, function(data) {
                         //change referer
-                        window.history.replaceState(null, '', '/tower-of-fame.html');
+                        window.history.replaceState(null, '', '/leagues.html');
 
                         //remove redirect
                         data.rewards.redirectUrl = '';
