@@ -2,6 +2,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.12.2] - 2024-01-17
+
+### Changed
+- Updating the URL from the league page after the game update
+
 ## [0.12.1] - 2024-01-04
 
 ### Added
