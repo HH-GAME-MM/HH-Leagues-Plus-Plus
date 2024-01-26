@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++
-// @version      0.12.2
+// @version      0.12.3
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/leagues.html*
@@ -8,6 +8,7 @@
 // @match        https://*.comixharem.com/leagues.html*
 // @match        https://*.pornstarharem.com/leagues.html*
 // @match        https://*.gayharem.com/leagues.html*
+// @match        https://*.gaypornstarharem.com/leagues.html*
 // @run-at       document-end
 // @namespace    https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus
 // @updateURL    https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/HH-Leagues-Plus-Plus.user.js
