@@ -2,6 +2,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.12.3] - 2024-01-26
+
+### Added
+- GPSH support
+
 ## [0.12.2] - 2024-01-17
 
 ### Changed
