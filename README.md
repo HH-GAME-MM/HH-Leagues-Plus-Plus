@@ -1,6 +1,6 @@
 # HH-League-Plus-Plus
 
-Supported games: HH.com, Nutaku, CxH, PsH, GH
+Supported games: HH.com, Nutaku, CxH, PsH, GH, GPSH
 
 Features:
 - ~~Opponent Team Theme Column~~ (meanwhile included in HH++)
