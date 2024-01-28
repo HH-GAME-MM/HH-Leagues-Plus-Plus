@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++ (Dev Version)
-// @version      0.12.3
+// @version      0.13.0
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/leagues.html*
@@ -9,6 +9,8 @@
 // @match        https://*.pornstarharem.com/leagues.html*
 // @match        https://*.gayharem.com/leagues.html*
 // @match        https://*.gaypornstarharem.com/leagues.html*
+// @match        https://*.transpornstarharem.com/leagues.html*
+// @match        https://*.hornyheroes.com/leagues.html*
 // @run-at       document-end
 // @namespace    https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus
 // @updateURL    https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/HH-Leagues-Plus-Plus.user.js
@@ -303,7 +305,7 @@
                         data.rewards.redirectUrl = '';
 
                         loadingAnimation.stop();
-                        Reward.handlePopup(data.rewards);
+                        RewardHandlePopup(data.rewards);
                         Hero.updates(data.hero_changes);
 
                         let lostFights = 0;
@@ -339,6 +341,19 @@
                     needed: fights - Hero.energies.challenge.amount
                 }, () => btnChallenge_click(btn1x, btn3x, opponent, fights))
             }
+        }
+
+        function RewardHandlePopup(rewards)
+        {
+            if(!rewards.lose)
+            {
+                //restore rewards if a fight was previously lost (the lost screen permanently hides the rewards)
+                const reward_holder = document.querySelector('#reward_holder');
+                if(reward_holder !== null) {
+                    reward_holder.setAttribute('style', '');
+                }
+            }
+            Reward.handlePopup(rewards);
         }
 
         function fillHistoryAndUpdateOpponentRow(opponent, fights, lostFights, pointsTotal)
