@@ -2,6 +2,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.13.0] - 2024-01-26
+
+### Added
+- TPSH support
+- hornyheroes.com support
+
+### Fixed
+- Kinkoid's function Reward.handlePopup(data.rewards) hides the rewards permanently when the lost screen is displayed once. A fix has been added to show the rewards on subsequent won fights
+
 ## [0.12.3] - 2024-01-26
 
 ### Added
