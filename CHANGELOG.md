@@ -2,7 +2,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [0.13.0] - 2024-01-26
+## [0.13.0] - 2024-01-28
 
 ### Added
 - TPSH support
