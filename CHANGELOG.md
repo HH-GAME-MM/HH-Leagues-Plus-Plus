@@ -2,6 +2,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.13.1] - 2024-02-12
+
+### Added
+- Objective popup (this is the popup that appears in the top left corner when you get points in other events)
+
 ## [0.13.0] - 2024-01-28
 
 ### Added
