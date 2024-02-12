@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++ (Dev Version)
-// @version      0.13.0
+// @version      0.13.1
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/leagues.html*
@@ -24,7 +24,7 @@
 (function() {
     //definitions
     'use strict';
-    /*global Hero,GT,IMAGES_URL,opponents_list,buildPlayerBlock,hero_page_popup,loadingAnimation,hh_ajax,Reward,HHPopupManager,$*/
+    /*global Hero,GT,IMAGES_URL,opponents_list,buildPlayerBlock,hero_page_popup,loadingAnimation,hh_ajax,Reward,HHPopupManager,objectivePopup,$*/
 
     TowerOfFame_css();
     setTimeout(TowerOfFame_run, 1);
@@ -307,6 +307,10 @@
                         loadingAnimation.stop();
                         RewardHandlePopup(data.rewards);
                         Hero.updates(data.hero_changes);
+                        if(data.objective_points) {
+                            data.rewards.objective_points = data.objective_points;
+                            objectivePopup.show(data.rewards);
+                        }
 
                         let lostFights = 0;
                         for (const reward of data.rewards.data.rewards) {
