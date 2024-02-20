@@ -1,16 +1,24 @@
 // ==UserScript==
 // @name         HH Leagues++ (Dev Version)
-// @version      0.13.1
+// @version      0.14.0
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/leagues.html*
+// @match        https://*.hentaiheroes.com/home.html*
 // @match        https://nutaku.haremheroes.com/leagues.html*
+// @match        https://nutaku.haremheroes.com/home.html*
 // @match        https://*.comixharem.com/leagues.html*
+// @match        https://*.comixharem.com/home.html*
 // @match        https://*.pornstarharem.com/leagues.html*
+// @match        https://*.pornstarharem.com/home.html*
 // @match        https://*.gayharem.com/leagues.html*
+// @match        https://*.gayharem.com/home.html*
 // @match        https://*.gaypornstarharem.com/leagues.html*
+// @match        https://*.gaypornstarharem.com/home.html*
 // @match        https://*.transpornstarharem.com/leagues.html*
+// @match        https://*.transpornstarharem.com/home.html*
 // @match        https://*.hornyheroes.com/leagues.html*
+// @match        https://*.hornyheroes.com/home.html*
 // @run-at       document-end
 // @namespace    https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus
 // @updateURL    https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/HH-Leagues-Plus-Plus.user.js
@@ -24,12 +32,15 @@
 (function() {
     //definitions
     'use strict';
-    /*global Hero,GT,IMAGES_URL,opponents_list,buildPlayerBlock,hero_page_popup,loadingAnimation,hh_ajax,Reward,HHPopupManager,objectivePopup,$*/
+    /*global Hero,GT,IMAGES_URL,opponents_list,buildPlayerBlock,hero_page_popup,loadingAnimation,hh_ajax,Reward,HHPopupManager,objectivePopup,ajaxBattle,hc_confirm,$*/
 
-    TowerOfFame_css();
-    setTimeout(TowerOfFame_run, 1);
+    const config = loadConfig();
+    if(window.location.pathname === '/leagues.html') {
+        Leagues_css();
+        setTimeout(Leagues_run, 1);
+    }
 
-    function TowerOfFame_css()
+    function Leagues_css()
     {
         let css = document.createElement('style');
         document.head.appendChild(css);
@@ -111,11 +122,11 @@
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="power"] .matchRating .matchRating-label { display: none; }');
     }
 
-    function TowerOfFame_run()
+    function Leagues_run()
     {
         //delay execution if the gui is not ready
         if(document.querySelector('#leagues div.league_girl') === null) {
-            setTimeout(TowerOfFame_run, 50);
+            setTimeout(Leagues_run, 50);
             return;
         }
 
@@ -258,7 +269,7 @@
             } else {
                 btn1x.setAttribute('disabled', 'disabled');
             }
-            if(available_fights > 1) {
+            if(config.ChallengeX3ButtonEnabled && available_fights > 1) {
                 btn3x.addEventListener("click", (event) => btnChallenge_click(btn1x, btn3x, opponent, available_fights));
             } else {
                 btn3x.setAttribute('disabled', 'disabled');
@@ -307,7 +318,7 @@
                         loadingAnimation.stop();
                         RewardHandlePopup(data.rewards);
                         Hero.updates(data.hero_changes);
-                        if(data.objective_points) {
+                        if(config.ObjectivePopupEnabled && data.objective_points) {
                             data.rewards.objective_points = data.objective_points;
                             objectivePopup.show(data.rewards);
                         }
@@ -329,7 +340,7 @@
                             btn1x.removeAttribute('disabled');
                             btn1x.addEventListener("click", (event) => btnChallenge_click(btn1x, btn3x, opponent, 1));
 
-                            if(available_fights > 1) {
+                            if(config.ChallengeX3ButtonEnabled && available_fights > 1) {
                                 btn3x.innerHTML = buildChallengeButtonInnerHtml(available_fights);
                                 btn3x.removeAttribute('disabled');
                                 btn3x.addEventListener("click", (event) => btnChallenge_click(btn1x, btn3x, opponent, available_fights));
@@ -517,5 +528,55 @@
                 }
             })
         }
+    }
+
+    function loadConfig()
+    {
+        //default config
+        let config = {
+            ObjectivePopupEnabled: true,
+            ChallengeX3ButtonEnabled: true
+        };
+
+        //if HHPlusPlus is installed, we load the config from there
+        const { HHPlusPlus, hhPlusPlusConfig } = window;
+        if (typeof HHPlusPlus !== 'undefined' && typeof hhPlusPlusConfig !== 'undefined')
+        {
+            hhPlusPlusConfig.registerGroup({
+                key: 'HHLeaguesPlusPlus',
+                name: 'HH Leagues++'
+            });
+
+            hhPlusPlusConfig.registerModule({
+                group: 'HHLeaguesPlusPlus',
+                configSchema: {
+                    baseKey: 'ChallengeX3ButtonEnabled',
+                    label: 'Challenge x3 button enabled',
+                    default: true,
+                },
+                run() {
+                    config.ChallengeX3ButtonEnabled = true;
+                },
+            });
+            config.ChallengeX3ButtonEnabled = false;
+
+            hhPlusPlusConfig.registerModule({
+                group: 'HHLeaguesPlusPlus',
+                configSchema: {
+                    baseKey: 'ObjectivePopupEnabled',
+                    label: 'Objective popup enabled',
+                    default: true,
+                },
+                run() {
+                    config.ObjectivePopupEnabled = true;
+                },
+            });
+            config.ObjectivePopupEnabled = false;
+
+            hhPlusPlusConfig.loadConfig();
+            hhPlusPlusConfig.runModules();
+        }
+
+        return config;
     }
 })();
