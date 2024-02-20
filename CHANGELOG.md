@@ -2,6 +2,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.14.0] - 2024-02-20
+
+### Added
+- The following settings are available if HH++ is installed: Challenge x3 button enabled, Objective popup enabled
+
 ## [0.13.1] - 2024-02-12
 
 ### Added
