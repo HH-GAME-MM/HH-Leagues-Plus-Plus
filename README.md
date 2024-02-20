@@ -14,6 +14,10 @@ Features:
 - Remember last selected opponent
 - Club member nicknames in green
 - bye bye pre-battle page
-- bye bye battle sequence (x1) 
+- bye bye battle sequence (x1)
+
+Settings (HH++ required):
+- Challenge x3 button enabled
+- Objective popup enabled
 
 ![img](https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/assets/107755486/cd1ee67c-1f0f-4449-bbb9-f5c9c7a7dd02)
