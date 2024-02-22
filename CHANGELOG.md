@@ -2,6 +2,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.14.1] - 2024-02-22
+
+### Fixed
+- The problem with the Session ID on Nutaku has been fixed (since yesterday's game update)
+
 ## [0.14.0] - 2024-02-20
 
 ### Added
