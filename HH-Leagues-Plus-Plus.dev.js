@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++ (Dev Version)
-// @version      0.14.0
+// @version      0.14.1
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/leagues.html*
@@ -32,7 +32,7 @@
 (function() {
     //definitions
     'use strict';
-    /*global Hero,GT,IMAGES_URL,opponents_list,buildPlayerBlock,hero_page_popup,loadingAnimation,hh_ajax,Reward,HHPopupManager,objectivePopup,ajaxBattle,hc_confirm,$*/
+    /*global Hero,GT,IMAGES_URL,opponents_list,buildPlayerBlock,hero_page_popup,loadingAnimation,hh_ajax,Reward,HHPopupManager,objectivePopup,ajaxBattle,hc_confirm,getSessionId,$*/
 
     const config = loadConfig();
     if(window.location.pathname === '/leagues.html') {
@@ -298,7 +298,8 @@
                 loadingAnimation.start();
 
                 //open the battle page first
-                $.ajax({ url: '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter, success: function(data) {
+                const nutakuSessionId = getSessionId();
+                $.ajax({ url: '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter + (nutakuSessionId !== null ? '&sess=' + nutakuSessionId : ''), success: function(data) {
 
                     //change referer
                     window.history.replaceState(null, '', fights === 1 ? '/league-battle.html?number_of_battles=1&id_opponent=' + opponent.player.id_fighter : '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter);
