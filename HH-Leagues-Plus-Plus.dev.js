@@ -1,24 +1,32 @@
 // ==UserScript==
 // @name         HH Leagues++ (Dev Version)
-// @version      0.14.1
+// @version      0.15.0
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/leagues.html*
 // @match        https://*.hentaiheroes.com/home.html*
+// @match        https://*.hentaiheroes.com/leagues-pre-battle.html*
 // @match        https://nutaku.haremheroes.com/leagues.html*
 // @match        https://nutaku.haremheroes.com/home.html*
+// @match        https://nutaku.haremheroes.com/leagues-pre-battle.html*
 // @match        https://*.comixharem.com/leagues.html*
 // @match        https://*.comixharem.com/home.html*
+// @match        https://*.comixharem.com/leagues-pre-battle.html*
 // @match        https://*.pornstarharem.com/leagues.html*
 // @match        https://*.pornstarharem.com/home.html*
+// @match        https://*.pornstarharem.com/leagues-pre-battle.html*
 // @match        https://*.gayharem.com/leagues.html*
 // @match        https://*.gayharem.com/home.html*
+// @match        https://*.gayharem.com/leagues-pre-battle.html*
 // @match        https://*.gaypornstarharem.com/leagues.html*
 // @match        https://*.gaypornstarharem.com/home.html*
+// @match        https://*.gaypornstarharem.com/leagues-pre-battle.html*
 // @match        https://*.transpornstarharem.com/leagues.html*
 // @match        https://*.transpornstarharem.com/home.html*
+// @match        https://*.transpornstarharem.com/leagues-pre-battle.html*
 // @match        https://*.hornyheroes.com/leagues.html*
 // @match        https://*.hornyheroes.com/home.html*
+// @match        https://*.hornyheroes.com/leagues-pre-battle.html*
 // @run-at       document-end
 // @namespace    https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus
 // @updateURL    https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/HH-Leagues-Plus-Plus.user.js
@@ -38,12 +46,20 @@
     if(window.location.pathname === '/leagues.html') {
         Leagues_css();
         setTimeout(Leagues_run, 1);
+    } else if(window.location.pathname === '/leagues-pre-battle.html') {
+        LeaguesPreBattle_css();
     }
 
     function Leagues_css()
     {
         let css = document.createElement('style');
         document.head.appendChild(css);
+
+        if(!config.ChallengeX3ButtonEnabled)
+        {
+            css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons .league-multiple-battle-button { display:none !important; }');
+            css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons .league-single-battle-button { width: 75% }');
+        }
 
         css.sheet.insertRule('#leagues .league_content .league_buttons .league_buttons_block .multiple-battles { min-width: 6.7rem; min-height: 54px; margin-right: 10px; }');
         css.sheet.insertRule('#leagues .league_content .league_buttons .change_team_container #change_team { min-width: 6.7rem; height: 54px; }');
@@ -64,8 +80,8 @@
                                   transition: none;
                               }`);
         css.sheet.insertRule('#leagues .league_table .nicescroll-rails {right:15rem !important}');
-        css.sheet.insertRule('#leagues .league_opponent .player_team_block.opponent {padding-left:0.75rem !important;padding-right:0.75rem !important}');
-        css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons {flex-direction: row !important}');
+        css.sheet.insertRule('#leagues .league_opponent .player_team_block.opponent {padding-left:0.75rem !important;padding-right:0.75rem !important; margin-top:-10px !important;height:508px !important;border-radius: .4rem !important;}');
+        css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons {flex-direction: row !important; justify-content: center !important;}');
         css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons .battle-action-button.green_button_L {min-width: 50%}');
         css.sheet.insertRule('#leagues .league_opponent .player-profile-picture {cursor:pointer !important}');
         css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="level"],
@@ -269,7 +285,7 @@
             } else {
                 btn1x.setAttribute('disabled', 'disabled');
             }
-            if(config.ChallengeX3ButtonEnabled && available_fights > 1) {
+            if(available_fights > 1) {
                 btn3x.addEventListener("click", (event) => btnChallenge_click(btn1x, btn3x, opponent, available_fights));
             } else {
                 btn3x.setAttribute('disabled', 'disabled');
@@ -341,7 +357,7 @@
                             btn1x.removeAttribute('disabled');
                             btn1x.addEventListener("click", (event) => btnChallenge_click(btn1x, btn3x, opponent, 1));
 
-                            if(config.ChallengeX3ButtonEnabled && available_fights > 1) {
+                            if(available_fights > 1) {
                                 btn3x.innerHTML = buildChallengeButtonInnerHtml(available_fights);
                                 btn3x.removeAttribute('disabled');
                                 btn3x.addEventListener("click", (event) => btnChallenge_click(btn1x, btn3x, opponent, available_fights));
@@ -528,6 +544,17 @@
                     hc_confirm(hc_price, startBattles)
                 }
             })
+        }
+    }
+
+    function LeaguesPreBattle_css()
+    {
+        if(!config.ChallengeX3ButtonEnabled)
+        {
+            let css = document.createElement('style');
+            document.head.appendChild(css);
+
+            css.sheet.insertRule('.league-multiple-battle-button { display:none !important; }');
         }
     }
 
