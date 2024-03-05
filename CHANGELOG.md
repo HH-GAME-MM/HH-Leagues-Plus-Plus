@@ -2,6 +2,12 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.15.0] - 2024-03-05
+
+### Changed
+- The "Challenge x3 button enabled" setting has been extended to the pre-battle page
+- Minor style changes
+
 ## [0.14.1] - 2024-02-22
 
 ### Fixed
