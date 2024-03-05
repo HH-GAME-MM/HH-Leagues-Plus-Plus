@@ -5,7 +5,8 @@ All notable changes to this project will be documented in this file.
 ## [0.15.0] - 2024-03-05
 
 ### Changed
-- The "Challenge x3 button enabled" setting has been extended to the pre-battle page
+- The setting "Challenge x3 button enabled" will now remove the x3 button and the x1 button will be displayed larger
+- The setting "Challenge x3 button enabled" has been extended to the pre-battle page
 - Minor style changes
 
 ## [0.14.1] - 2024-02-22
