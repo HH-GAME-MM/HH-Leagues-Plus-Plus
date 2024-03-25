@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++ (Dev Version)
-// @version      0.15.0
+// @version      0.16.0
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/leagues.html*
@@ -32,15 +32,29 @@
 // @updateURL    https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/HH-Leagues-Plus-Plus.user.js
 // @downloadURL  https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/HH-Leagues-Plus-Plus.user.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=hentaiheroes.com
-// @grant        none
+// @grant        GM_info
 // ==/UserScript==
 
 //CHANGELOG: https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/CHANGELOG.md
 
-(function() {
+(function(window) {
     //definitions
     'use strict';
-    /*global Hero,GT,IMAGES_URL,opponents_list,buildPlayerBlock,hero_page_popup,loadingAnimation,hh_ajax,Reward,HHPopupManager,objectivePopup,ajaxBattle,hc_confirm,getSessionId,$*/
+    /*global shared,Hero,GT,IMAGES_URL,opponents_list,buildPlayerBlock,hero_page_popup,loadingAnimation,hh_ajax,Reward,HHPopupManager,objectivePopup,ajaxBattle,hc_confirm,getSessionId,$*/
+
+    console.log(GM_info.script.name + ' Script v' + GM_info.script.version);
+
+    //shared game functions and objects
+    const Hero = (window.Hero ? window.Hero : shared.Hero);
+    const hh_ajax = (window.hh_ajax ? window.hh_ajax : shared.general.hh_ajax);
+    const ajaxBattle = (window.ajaxBattle ? window.ajaxBattle : shared.general.ajaxBattle);
+    const loadingAnimation = (window.loadingAnimation ? window.loadingAnimation : shared.animations.loadingAnimation);
+    const HHPopupManager = (window.HHPopupManager ? window.HHPopupManager : shared.popups_manager.HHPopupManager);
+    const objectivePopup = (window.objectivePopup ? window.objectivePopup : shared.general.objectivePopup);
+    const Reward = (window.Reward ? window.Reward : shared.reward_popup.Reward);
+    const buildPlayerBlock = (window.buildPlayerBlock ? window.buildPlayerBlock : shared.team_block_builder.buildPlayerBlock);
+    const hc_confirm = (window.hc_confirm ? window.hc_confirm : shared.general.hc_confirm);
+    const getSessionId = (window.getSessionId ? window.getSessionId : () => { return new URLSearchParams(window.location.search).get("sess"); }); //Nutaku only
 
     const config = loadConfig();
     if(window.location.pathname === '/leagues.html') {
@@ -79,7 +93,6 @@
                               #leagues .league_table .data-list .data-row.body-row.player-row.selected .head-column[column="value"] {
                                   transition: none;
                               }`);
-        css.sheet.insertRule('#leagues .league_table .nicescroll-rails {right:15rem !important}');
         css.sheet.insertRule('#leagues .league_opponent .player_team_block.opponent {padding-left:0.75rem !important;padding-right:0.75rem !important; margin-top:-10px !important;height:508px !important;border-radius: .4rem !important;}');
         css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons {flex-direction: row !important; justify-content: center !important;}');
         css.sheet.insertRule('#leagues .league_opponent .player-panel-buttons .battle-action-button.green_button_L {min-width: 50%}');
@@ -130,6 +143,27 @@
                                   min-width: 13rem;
                                   padding-top: 10px;
                               }`);
+
+        if(config.RemoveChallengeColumn)
+        {
+            //remove challenge column and css for the pin inside the match history
+            css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="can_fight"], #leagues .league_content .league_table .data-list .data-row .head-column[column="can_fight"] {
+                                      display: none;
+                                  }`);
+            css.sheet.insertRule(`#leagues .league_content.hidden_girl .league_table .data-list .data-row .data-column[column="boosters"], #leagues .league_content.hidden_girl .league_table .data-list .data-row .head-column[column="boosters"] {
+                                      min-width: 13.2rem;
+                                  }`);
+            css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row.body-row.player-row .data-column[column="match_history_sorting"] .player-pin img {
+                                      width: 1.5rem;
+                                      transform: scaleX(-1);
+                                  }`);
+            css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row.body-row.player-row .data-column[column="match_history_sorting"] .player-pin {
+                                      opacity: .5;
+                                  }`);
+            css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row.body-row.player-row .data-column[column="match_history_sorting"] .player-pin.pinned {
+                                      opacity: 1;
+                                  }`);
+        }
 
         //HH++ Sim Results
         css.sheet.insertRule('#leagues .matchRating { display: block; }');
@@ -226,6 +260,16 @@
                 //highlight row
                 if(currentOpponent === opponent) opponentRow.classList.add('selected');
             }
+
+            if(config.RemoveChallengeColumn)
+            {
+                setTimeout(() => {
+                    //move the pin into the match history column
+                    const playerMatchHistory = document.querySelector('.data-list .data-row.body-row.player-row .data-column[column="match_history_sorting"]');
+                    playerMatchHistory.innerHTML = '';
+                    playerMatchHistory.appendChild(document.querySelector('div.player-pin'));
+                }, 1);
+            }
         }
 
         function selectOpponent(row, opponent)
@@ -266,9 +310,32 @@
                 hero_page_popup({id:opponent.player.id_fighter});
             });
 
-            //TODO: add clubname to opponent view
-
             let available_fights = getAvailableFights(opponent);
+
+            //add clubname to opponent view
+            const nutakuSessionId = getSessionId();
+            if(opponent.player.club != null)
+            {
+                const aClubName = document.createElement('a');
+                aClubName.setAttribute('style', 'font-size: 11px; color: lightsalmon; text-decoration: none; width: 158px; display: block; margin: 0 auto; -webkit-text-shadow: 3px 1px 5px #000; -moz-text-shadow: 3px 1px 5px #000; text-shadow: 3px 1px 5px #000;');
+                aClubName.setAttribute('href', '/clubs.html?prev_page=leagues.html&view_club=' + opponent.player.club.id_club + (nutakuSessionId !== null ? '&sess=' + nutakuSessionId : ''));
+                aClubName.setAttribute('title', opponent.player.club.name);
+                aClubName.innerHTML = opponent.player.club.name;
+                document.querySelector('#leagues .league_opponent .personal_info .player_basic_info').appendChild(aClubName);
+            }
+
+            //add pre-battle page link to the players name
+            if(Hero.infos.id != opponent.player.id_fighter && available_fights > 0)
+            {
+                const divPlayerName = document.querySelector('#leagues .league_opponent .personal_info .player-name');
+                const aPlayerName = document.createElement('a');
+                aPlayerName.setAttribute('class', 'player-name');
+                aPlayerName.setAttribute('style', 'color: white; text-decoration: none;');
+                aPlayerName.setAttribute('href', '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter + (nutakuSessionId !== null ? '&sess=' + nutakuSessionId : ''));
+                aPlayerName.setAttribute('title', divPlayerName.innerText);
+                aPlayerName.innerHTML = divPlayerName.innerHTML;
+                divPlayerName.parentNode.replaceChild(aPlayerName, divPlayerName);
+            }
 
             //button container
             let container = document.querySelector('#leagues .league_opponent .player-panel-buttons');
@@ -351,7 +418,7 @@
                         //fill match history to prevent further fights
                         const available_fights = fillHistoryAndUpdateOpponentRow(opponent, fights, lostFights, data.rewards.heroChangesUpdate.league_points);
 
-                        //update 1x/3x buttons
+                        //update 1x/3x
                         if(available_fights > 0)
                         {
                             btn1x.removeAttribute('disabled');
@@ -437,9 +504,14 @@
                 //remove "Go" button and event listeners when no more fights are available
                 if(available_fights === 0)
                 {
+                    //remove the "Go" button in the list
                     let canFightColumn = getOpponentColumn(opponent.player.id_fighter, 'can_fight');
                     canFightColumn.innerHTML = '';
                     canFightColumn.parentNode.replaceChild(canFightColumn.cloneNode(true), canFightColumn);
+
+                    //remove the pre-battle page link in the opponent view
+                    const aPlayerName = document.querySelector('#leagues .league_opponent .personal_info .player-name');
+                    aPlayerName.removeAttribute('href');
                 }
                 return available_fights;
             }
@@ -563,7 +635,8 @@
         //default config
         let config = {
             ObjectivePopupEnabled: true,
-            ChallengeX3ButtonEnabled: true
+            ChallengeX3ButtonEnabled: true,
+            RemoveChallengeColumn: false
         };
 
         //if HHPlusPlus is installed, we load the config from there
@@ -601,10 +674,23 @@
             });
             config.ObjectivePopupEnabled = false;
 
+            hhPlusPlusConfig.registerModule({
+                group: 'HHLeaguesPlusPlus',
+                configSchema: {
+                    baseKey: 'RemoveChallengeColumn',
+                    label: 'Remove challenge column (Hint: Click on the player\'s name to open the pre-battle page)',
+                    default: false,
+                },
+                run() {
+                    config.RemoveChallengeColumn = true;
+                },
+            });
+            config.RemoveChallengeColumn = false;
+
             hhPlusPlusConfig.loadConfig();
             hhPlusPlusConfig.runModules();
         }
 
         return config;
     }
-})();
+})(window.unsafeWindow);
