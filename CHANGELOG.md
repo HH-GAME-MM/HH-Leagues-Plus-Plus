@@ -2,6 +2,16 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.16.0] - 2024-03-25
+
+### Added
+- Added club name to opponent view
+- Added pre-battle page link to the opponent's nickname
+- New setting "Remove Challenge Column" is available if HH++ is installed. It removes the Challenge Column ("Go" buttons) and moves the pin on the player row to the match history
+
+### Changed
+- Compatibility update for the code with the new bundler, which is expected to be released on Wednesday
+
 ## [0.15.0] - 2024-03-05
 
 ### Changed
