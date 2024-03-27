@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++ (Dev Version)
-// @version      0.16.0
+// @version      0.16.1
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/leagues.html*
@@ -40,7 +40,7 @@
 (function(window) {
     //definitions
     'use strict';
-    /*global shared,Hero,GT,IMAGES_URL,opponents_list,buildPlayerBlock,hero_page_popup,loadingAnimation,hh_ajax,Reward,HHPopupManager,objectivePopup,ajaxBattle,hc_confirm,getSessionId,$*/
+    /*global shared,opponents_list,$*/
 
     console.log(GM_info.script.name + ' Script v' + GM_info.script.version);
 
@@ -51,6 +51,7 @@
     const loadingAnimation = (window.loadingAnimation ? window.loadingAnimation : shared.animations.loadingAnimation);
     const HHPopupManager = (window.HHPopupManager ? window.HHPopupManager : shared.popups_manager.HHPopupManager);
     const objectivePopup = (window.objectivePopup ? window.objectivePopup : shared.general.objectivePopup);
+    const hero_page_popup = (window.hero_page_popup ? window.hero_page_popup : shared.general.hero_page_popup);
     const Reward = (window.Reward ? window.Reward : shared.reward_popup.Reward);
     const buildPlayerBlock = (window.buildPlayerBlock ? window.buildPlayerBlock : shared.team_block_builder.buildPlayerBlock);
     const hc_confirm = (window.hc_confirm ? window.hc_confirm : shared.general.hc_confirm);
@@ -307,7 +308,11 @@
 
             //open the hero page when clicking on the avatar
             document.querySelector('#leagues .league_opponent .player-profile-picture').addEventListener('click', (e) => {
-                hero_page_popup({id:opponent.player.id_fighter});
+                hero_page_popup({
+                    id: opponent.player.id_fighter,
+                    preview: false,
+                    page: 'profile'
+                });
             });
 
             let available_fights = getAvailableFights(opponent);
