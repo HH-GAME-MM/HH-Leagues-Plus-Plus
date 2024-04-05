@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++ (Dev Version)
-// @version      0.16.1
+// @version      0.16.2
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/leagues.html*
@@ -33,6 +33,7 @@
 // @downloadURL  https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/HH-Leagues-Plus-Plus.user.js
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=hentaiheroes.com
 // @grant        GM_info
+// @grant        unsafeWindow
 // ==/UserScript==
 
 //CHANGELOG: https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/CHANGELOG.md
@@ -167,7 +168,7 @@
         }
 
         //HH++ Sim Results
-        css.sheet.insertRule('#leagues .matchRating { display: block; }');
+        css.sheet.insertRule('#leagues .matchRating { display: block !important; }');
         css.sheet.insertRule('#leagues .league_opponent .matchRating-win-chance { margin-top: 5px; }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="power"] .matchRating .matchRating-value { font-size: 12px; }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="power"] .matchRating .matchRating-label { display: none; }');
@@ -390,7 +391,7 @@
                 $.ajax({ url: '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter + (nutakuSessionId !== null ? '&sess=' + nutakuSessionId : ''), success: function(data) {
 
                     //change referer
-                    window.history.replaceState(null, '', fights === 1 ? '/league-battle.html?number_of_battles=1&id_opponent=' + opponent.player.id_fighter : '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter);
+                    window.history.replaceState(null, '', (fights === 1 ? '/league-battle.html?number_of_battles=1&id_opponent=' + opponent.player.id_fighter : '/leagues-pre-battle.html?id_opponent=' + opponent.player.id_fighter) + (nutakuSessionId !== null ? '&sess=' + nutakuSessionId : ''));
 
                     let params = {
                         action: "do_battles_leagues",
@@ -399,7 +400,7 @@
                     };
                     hh_ajax(params, function(data) {
                         //change referer
-                        window.history.replaceState(null, '', '/leagues.html');
+                        window.history.replaceState(null, '', '/leagues.html' + (nutakuSessionId !== null ? '?sess=' + nutakuSessionId : ''));
 
                         //remove redirect
                         data.rewards.redirectUrl = '';
@@ -698,4 +699,4 @@
 
         return config;
     }
-})(window.unsafeWindow);
+})(unsafeWindow);
