@@ -2,6 +2,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.16.2] - 2024-03-27
+
+### Added
+- Compatibility with Safari extension "stay"
+
+### Fixed
+- Nutaku "Invalid starting of battle"
+- "Line break" for HH++ sim results
+
 ## [0.16.1] - 2024-03-27
 
 ### Fixed
