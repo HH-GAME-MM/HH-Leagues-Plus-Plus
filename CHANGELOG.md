@@ -2,7 +2,7 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-## [0.16.2] - 2024-03-27
+## [0.16.2] - 2024-04-05
 
 ### Added
 - Compatibility with Safari extension "stay"
