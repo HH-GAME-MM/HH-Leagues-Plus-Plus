@@ -1,4 +1,4 @@
-# HH-Leagues-Plus-Plus
+# HH Leagues++
 
 Supported games: HH.com, Nutaku, CxH, PsH, GH, GPSH, TPSH, hornyheroes.com
 
