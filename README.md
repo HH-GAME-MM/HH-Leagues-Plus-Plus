@@ -2,6 +2,8 @@
 
 Supported games: HH.com, Nutaku, CxH, PsH, GH, GPSH, TPSH, hornyheroes.com
 
+Compatible Browsers: Mozilla Firefox (Desktop), Google Chrome (Desktop & Android), Opera (Desktop), Firefox Nightly (Android), Kiwi Browser (Android), Safari (with Safari extension ["Stay"](https://apps.apple.com/us/app/stay-for-safari/id1591620171))
+
 Features:
 - ~~Opponent Team Theme Column~~ (meanwhile included in HH++)
 - ~~Change Team Button~~ (meanwhile included in the game)
