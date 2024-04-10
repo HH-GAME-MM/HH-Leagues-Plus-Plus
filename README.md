@@ -6,7 +6,7 @@ Compatible Browsers: Mozilla Firefox (Desktop), Google Chrome (Desktop & Android
 
 See here for installation instructions: https://github.com/HH-GAME-MM/HH-Club-Chat-Plus-Plus
 
-Features:
+<b>Features:</b>
 - ~~Opponent Team Theme Column~~ (meanwhile included in HH++)
 - ~~Change Team Button~~ (meanwhile included in the game)
 - Opponent Preview
@@ -20,7 +20,7 @@ Features:
 - bye bye pre-battle page
 - bye bye battle sequence (x1)
 
-Settings (HH++ required):
+<b>Settings (HH++ required):</b>
 - Challenge x3 button enabled
 - Objective popup enabled
 
