@@ -7,18 +7,21 @@ Compatible Browsers: Mozilla Firefox (Desktop), Google Chrome (Desktop & Android
 See here for installation instructions: [https://github.com/HH-GAME-MM/HH-Club-Chat-Plus-Plus](https://github.com/HH-GAME-MM/HH-Club-Chat-Plus-Plus/?tab=readme-ov-file#windows--mac-os---installation-instructions)
 
 <b>Features:</b>
-- ~~Opponent Team Theme Column~~ (meanwhile included in HH++)
-- ~~Change Team Button~~ (meanwhile included in the game)
+
 - Opponent Preview
-- Open Hero Profile (click avatar)
 - Challenge x1 / Challenge x3
-- ~~Battle Simulator~~ (meanwhile included in HH++)
-- ~~Fade expired boosters~~ (meanwhile included in HH++)
+- Show club name
+- Open Hero Profile (click avatar)
+- Open pre-battle page by clicking on the nickname
 - Confirmation for 15x button
 - Remember last selected opponent
 - Club member nicknames in green
 - bye bye pre-battle page
 - bye bye battle sequence (x1)
+- ~~Opponent Team Theme Column~~ (meanwhile included in HH++)
+- ~~Change Team Button~~ (meanwhile included in the game)
+- ~~Battle Simulator~~ (meanwhile included in HH++)
+- ~~Fade expired boosters~~ (meanwhile included in HH++)
 
 <b>Settings (HH++ required):</b>
 - Challenge x3 button enabled
