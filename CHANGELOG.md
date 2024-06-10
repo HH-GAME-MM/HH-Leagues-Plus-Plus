@@ -2,6 +2,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.16.3] - 2024-06-10
+
+### Fixed
+- Remove unnecessary scrollbar (since the last game update, a scrollbar (about 2 pixels scrollable) appears from time to time when using the filter in HH++ in combination with Leagues++)
+
 ## [0.16.2] - 2024-04-05
 
 ### Added
