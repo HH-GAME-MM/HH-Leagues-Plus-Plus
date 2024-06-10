@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++ (Dev Version)
-// @version      0.16.2
+// @version      0.16.3
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/leagues.html*
@@ -127,6 +127,9 @@
                                   height: 1.7rem !important;
                                   line-height: 1.7rem !important;
                               }`);
+        css.sheet.insertRule(`#leagues .league_content .league_table .data-list {
+                                  overflow: hidden
+                              }`); //Remove unnecessary scrollbar
         css.sheet.insertRule(`#leagues .league_opponent.hidden_girl {
                                   position: absolute;
                                   right: 0;
