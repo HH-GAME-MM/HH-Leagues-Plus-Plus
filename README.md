@@ -6,6 +6,8 @@ Compatible Browsers: Mozilla Firefox (Desktop), Google Chrome (Desktop & Android
 
 See here for installation instructions: [https://github.com/HH-GAME-MM/HH-Club-Chat-Plus-Plus](https://github.com/HH-GAME-MM/HH-Club-Chat-Plus-Plus/?tab=readme-ov-file#windows--mac-os---installation-instructions)
 
+Script URL: https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/HH-Leagues-Plus-Plus.user.js
+
 <b>Features:</b>
 
 - Opponent Preview
