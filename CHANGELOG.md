@@ -2,6 +2,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.16.4] - 2024-09-19
+
+### Changed
+- HH++ battle sim removed because it is outdated and still used resources in some cases. Only rena's sim is now supported: https://github.com/rena-jp/hh-battle-simulator-v4
+
+### Fixed
+- Added a temporary fix for the game changes from Tuesday (Refill popup with x1/x3 buttons didn't work). Note: Full refill excluded
+
 ## [0.16.3] - 2024-06-10
 
 ### Fixed
