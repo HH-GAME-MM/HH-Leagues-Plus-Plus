@@ -16,6 +16,7 @@ Recommended Scripts:
 
 - Opponent Preview
 - Challenge x1 / Challenge x3
+- Battle Simulator (HH++ and rena's Battle Sim required)
 - Show club name
 - Open Hero Profile (click avatar)
 - Open pre-battle page by clicking on the nickname
@@ -26,7 +27,6 @@ Recommended Scripts:
 - bye bye battle sequence (x1)
 - ~~Opponent Team Theme Column~~ (meanwhile included in HH++)
 - ~~Change Team Button~~ (meanwhile included in the game)
-- ~~Battle Simulator~~ (meanwhile included in HH++)
 - ~~Fade expired boosters~~ (meanwhile included in HH++)
 
 <b>Settings (HH++ required):</b>
