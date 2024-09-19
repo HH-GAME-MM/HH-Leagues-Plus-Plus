@@ -8,7 +8,7 @@ See here for installation instructions: [https://github.com/HH-GAME-MM/HH-Club-C
 
 Script URL: https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/HH-Leagues-Plus-Plus.user.js
 
-Required Scripts:
+Recommended Scripts:
 - HH++: https://github.com/zoop0kemon/hh-plus-plus
 - Rena's Battle Sim: https://github.com/rena-jp/hh-battle-simulator-v4
 
