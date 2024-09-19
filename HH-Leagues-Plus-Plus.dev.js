@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++ (Dev Version)
-// @version      0.16.3
+// @version      0.16.4
 // @description  Upgrade League with various features
 // @author       -MM-
 // @match        https://*.hentaiheroes.com/leagues.html*
@@ -172,7 +172,6 @@
 
         //HH++ Sim Results
         css.sheet.insertRule('#leagues .matchRating { display: block !important; }');
-        css.sheet.insertRule('#leagues .league_opponent .matchRating-win-chance { margin-top: 5px; }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="power"] .matchRating .matchRating-value { font-size: 12px; }');
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row .data-column[column="power"] .matchRating .matchRating-label { display: none; }');
     }
@@ -230,11 +229,6 @@
             let opponentRow = getOpponentRow(lastOpponentId);
             if(opponent !== null && opponentRow !== null) selectOpponent(opponentRow, opponent);
         }
-
-        //add an event listener for HH++ Sim Results (HH++ v1.38.0 or higher required)
-        $(document).on('league:sim-done', function() {
-            if(currentOpponent !== null) showOpponent(currentOpponent);
-        });
 
         function modifyDataList()
         {
@@ -369,8 +363,22 @@
             container.appendChild(btn1x);
             container.appendChild(btn3x);
 
-            //Run Battle Sim from HH++ Script
-            HHPlusPlus_RunBattleSim(opponent, available_fights);
+            //Show rena's Battle Sim (HH++ required)
+            showBattleSim(opponent);
+        }
+
+        function showBattleSim(opponent)
+        {
+            if(!window.HHPlusPlus) return;
+
+            //sim results available?
+            if(opponent.sim) {
+                //show rena's Battle Sim
+                (new window.HHPlusPlus.League).display(opponent.sim);
+            } else {
+                //trigger rena's Battle Sim
+                window.opponent_fighter = opponent;
+            }
         }
 
         function btnChallenge_click(btn1x, btn3x, opponent, fights)
@@ -444,10 +452,18 @@
             }
             else
             {
-                HHPopupManager.show("no_energy_challenge", {
+                //temporary solution
+                const needed = fights - Hero.energies.challenge.amount;
+                const tmpAmount = shared.Hero.energies.challenge.amount;
+                shared.Hero.energies.challenge.amount = shared.Hero.energies.challenge.max_regen_amount - needed;
+                document.querySelector('button.orange_button_L.refill-challenge-points').click();
+                shared.Hero.energies.challenge.amount = tmpAmount;
+
+                //old code
+                /*HHPopupManager.show("no_energy_challenge", {
                     energy: "challenge",
                     needed: fights - Hero.energies.challenge.amount
-                }, () => btnChallenge_click(btn1x, btn3x, opponent, fights))
+                }, () => btnChallenge_click(btn1x, btn3x, opponent, fights))*/
             }
         }
 
@@ -529,37 +545,6 @@
         function buildChallengeButtonInnerHtml(available_fights)
         {
             return '<div class="action-label">Challenge!</div><div class="action-cost"><div><span class="energy_challenge_icn"></span> x'+available_fights+'</div></div>';
-        }
-
-        function HHPlusPlus_RunBattleSim(opponent_fighter, available_fights)
-        {
-            if(!window.HHPlusPlus) return;
-
-            //sim results from HH++ available? (HH++ v1.38.0 or higher required)
-            if(opponent_fighter.sim)
-            {
-                (new window.HHPlusPlus.League).display(opponent_fighter.sim);
-            }
-            else
-            {
-                //use the snapshot data and wait for the actual data from HH++ (only required for accurate battle sim)
-                window.hero_data = opponents_list_getData(Hero.infos.id).player;
-                window.opponent_fighter = opponent_fighter;
-
-                //HH++ Battle Sim
-                //Sources: hh-plus-plus/src/modules/BattleSimulatorModule/index.js
-                //Sources: hh-plus-plus/src/modules/BattleSimulatorModule/League.js
-                let simManager = new window.HHPlusPlus.League;
-                const {player, opponent} = simManager.extract();
-                const simulator = new window.HHPlusPlus.Simulator({player, opponent});
-                const result = simulator.run();
-                simManager.display(result);
-
-                //mark snapshot data with exclamation mark
-                document.querySelectorAll('#leagues .league_opponent .matchRating-value').forEach(function(e) {
-                    e.innerHTML = '! ' + e.innerHTML + ' !';
-                });
-            }
         }
 
         function hideLeagueGirl()
@@ -648,7 +633,7 @@
             RemoveChallengeColumn: false
         };
 
-        //if HHPlusPlus is installed, we load the config from there
+        //if HH++ is installed, we load the config from there
         const { HHPlusPlus, hhPlusPlusConfig } = window;
         if (typeof HHPlusPlus !== 'undefined' && typeof hhPlusPlusConfig !== 'undefined')
         {
