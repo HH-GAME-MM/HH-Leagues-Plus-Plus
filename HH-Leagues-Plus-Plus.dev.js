@@ -38,7 +38,7 @@
 
 //CHANGELOG: https://github.com/HH-GAME-MM/HH-Leagues-Plus-Plus/raw/main/CHANGELOG.md
 
-(function(window) {
+(async function(window) {
     //definitions
     'use strict';
     /*global shared,opponents_list,$*/
@@ -58,7 +58,7 @@
     const hc_confirm = (window.hc_confirm ? window.hc_confirm : shared.general.hc_confirm);
     const getSessionId = (window.getSessionId ? window.getSessionId : () => { return new URLSearchParams(window.location.search).get("sess"); }); //Nutaku only
 
-    const config = loadConfig();
+    const config = await loadConfig();
     if(window.location.pathname === '/leagues.html') {
         Leagues_css();
         setTimeout(Leagues_run, 1);
@@ -624,7 +624,15 @@
         }
     }
 
-    function loadConfig()
+    async function getHHPlusPlusConfig() {
+        return (async () => {
+            if (window.hhPlusPlusConfig != null) return window.hhPlusPlusConfig;
+            await new Promise($);
+            return window.hhPlusPlusConfig;
+        })();
+    }
+
+    async function loadConfig()
     {
         //default config
         let config = {
@@ -634,8 +642,8 @@
         };
 
         //if HH++ is installed, we load the config from there
-        const { HHPlusPlus, hhPlusPlusConfig } = window;
-        if (typeof HHPlusPlus !== 'undefined' && typeof hhPlusPlusConfig !== 'undefined')
+        const hhPlusPlusConfig = await getHHPlusPlusConfig();
+        if (hhPlusPlusConfig != null)
         {
             hhPlusPlusConfig.registerGroup({
                 key: 'HHLeaguesPlusPlus',
