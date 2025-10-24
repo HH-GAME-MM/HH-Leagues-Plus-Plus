@@ -148,6 +148,7 @@
                                   min-width: 13rem;
                                   padding-top: 10px;
                               }`);
+        css.sheet.insertRule(`#leagues .league_content.hidden_girl .league_table .data-list .data-row div.head-column[column="team"] { overflow: unset; }`);
 
         if(config.RemoveChallengeColumn)
         {
