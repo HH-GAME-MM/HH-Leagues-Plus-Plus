@@ -2,6 +2,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.16.5] - 2025-10-25
+
+### Fixed
+- Disabled hiding overflow of team column header
+
 ## [0.16.4] - 2024-09-19
 
 ### Changed
