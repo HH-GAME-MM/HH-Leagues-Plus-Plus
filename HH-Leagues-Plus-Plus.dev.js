@@ -149,6 +149,7 @@
                                   padding-top: 10px;
                               }`);
         css.sheet.insertRule(`#leagues .league_content.hidden_girl .league_table .data-list .data-row div.head-column[column="team"] { overflow: unset; }`);
+        css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row.player-row.pinned { width: 47rem; }');
 
         if(config.RemoveChallengeColumn)
         {
