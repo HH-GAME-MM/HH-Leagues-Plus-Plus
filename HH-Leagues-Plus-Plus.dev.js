@@ -43,8 +43,6 @@
     'use strict';
     /*global shared,opponents_list,$*/
 
-    console.log(GM_info.script.name + ' Script v' + GM_info.script.version);
-
     //shared game functions and objects
     const Hero = (window.Hero ? window.Hero : shared.Hero);
     const hh_ajax = (window.hh_ajax ? window.hh_ajax : shared.general.hh_ajax);
@@ -682,7 +680,7 @@
 
             hhPlusPlusConfig.registerGroup({
                 key: 'HHLeaguesPlusPlus',
-                name: 'HH Leagues++'
+                name: `<span tooltip="${GM_info.script.version}">HH Leagues++</span>`
             });
 
             hhPlusPlusConfig.registerModule({
