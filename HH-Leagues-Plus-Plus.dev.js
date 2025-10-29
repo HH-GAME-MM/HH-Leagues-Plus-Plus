@@ -262,13 +262,20 @@
                 if(currentOpponent === opponent) opponentRow.classList.add('selected');
             }
 
+            // move pin to the challenge column
+            const $pin = $('.pin-player-row');
+            $pin.detach().appendTo('.player-row .data-column[column="can_fight"]');
+            // delete the now empty column
+            $('.data-column[column="player_pin"]').remove();
+
             if(config.RemoveChallengeColumn)
             {
                 setTimeout(() => {
                     //move the pin into the match history column
-                    const playerMatchHistory = document.querySelector('.data-list .data-row.body-row.player-row .data-column[column="match_history_sorting"]');
-                    playerMatchHistory.innerHTML = '';
-                    playerMatchHistory.appendChild(document.querySelector('div.player-pin'));
+                    const $playerMatchHistory = $('.player-row .data-column[column="match_history_sorting"]');
+                    // delete the new player's average text
+                    $playerMatchHistory.html('');
+                    $pin.detach().appendTo($playerMatchHistory);
                 }, 1);
             }
         }
