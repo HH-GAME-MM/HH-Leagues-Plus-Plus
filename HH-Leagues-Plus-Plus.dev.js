@@ -495,6 +495,9 @@
 
         function RewardHandlePopup(rewards)
         {
+            if(config.RemoveRewardPopup){
+                return;
+            }
             if(!rewards.lose)
             {
                 //restore rewards if a fight was previously lost (the lost screen permanently hides the rewards)
@@ -667,7 +670,8 @@
             HHPlusPlus: false,
             ObjectivePopupEnabled: true,
             ChallengeX3ButtonEnabled: true,
-            RemoveChallengeColumn: false
+            RemoveChallengeColumn: false,
+            RemoveRewardPopup: false,
         };
 
         //if HH++ is installed, we load the config from there
@@ -719,6 +723,19 @@
                 },
             });
             config.RemoveChallengeColumn = false;
+
+            hhPlusPlusConfig.registerModule({
+                group: 'HHLeaguesPlusPlus',
+                configSchema: {
+                    baseKey: 'RemoveRewardPopup',
+                    label: 'Removes the reward popup on win/loose after a fight',
+                    default: false,
+                },
+                run() {
+                    config.RemoveRewardPopup = true;
+                },
+            });
+            config.RemoveRewardPopup = false;
 
             hhPlusPlusConfig.loadConfig();
             hhPlusPlusConfig.runModules();
