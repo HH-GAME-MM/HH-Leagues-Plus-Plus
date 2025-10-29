@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++ (Dev Version)
-// @version      0.17.0
+// @version      0.18.0
 // @description  Upgrade League with various features
 // @author       -MM-, xnh0x
 // @match        https://*.hentaiheroes.com/leagues.html*

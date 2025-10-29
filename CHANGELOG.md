@@ -2,6 +2,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.18.0] - 2025-10-29
+
+### Added
+- Option to remove the reward popup after a fight
+
+### Fixed
+- Fixing style issue with pinned row and few opponents in the table
+
 ## [0.17.0] - 2025-10-29
 
 ### Changed
