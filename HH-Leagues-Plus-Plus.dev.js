@@ -268,6 +268,22 @@
             // delete the now empty column
             $('.data-column[column="player_pin"]').remove();
 
+            // make pin sticky
+            let pinState = loadPinState();
+            if (pinState) {
+                $('.player-row').addClass('pinned');
+                $pin.attr('row-pinned', '1');
+                $('.league_table.hh-scroll').addClass('player-row-pinned');
+            } else {
+                $('.player-row').removeClass('pinned');
+                $pin.attr('row-pinned', '0');
+                $('.league_table.hh-scroll').removeClass('player-row-pinned');
+            }
+            $pin.on('click', (event) => {
+                pinState = !pinState;
+                savePinState(pinState);
+            });
+
             if(config.RemoveChallengeColumn)
             {
                 setTimeout(() => {
@@ -602,6 +618,16 @@
         function loadLastOpponentId()
         {
             return localStorage.getItem('HHLeaguesPlusPlusLastOpponentId');
+        }
+
+        function savePinState(state)
+        {
+            localStorage.setItem('HHLeaguesPlusPlusPlayerPinned', state);
+        }
+
+        function loadPinState()
+        {
+            return localStorage.getItem('HHLeaguesPlusPlusPlayerPinned') === 'true';
         }
 
         //modified KK function, Code Line 27058 default.js v69097541 2023-08-03
