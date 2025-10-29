@@ -159,7 +159,7 @@
         if (config.HHPlusPlus) {
             // fix footer for pinned row
             css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row.player-row.pinned { top: 29.5rem; }');
-            css.sheet.insertRule('#leagues .league_content .league_table.player-row-pinned { height: unset; margin-bottom: 2.75rem; }');
+            css.sheet.insertRule('#leagues .league_content .league_table.player-row-pinned { height: 100%; margin-bottom: 2.75rem; }');
             css.sheet.insertRule('.player-pin { display: none; }');
         }
 
