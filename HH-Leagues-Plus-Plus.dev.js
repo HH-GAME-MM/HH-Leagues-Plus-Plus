@@ -728,7 +728,7 @@
                 group: 'HHLeaguesPlusPlus',
                 configSchema: {
                     baseKey: 'RemoveRewardPopup',
-                    label: 'Removes the reward popup on win/loose after a fight',
+                    label: 'Removes the reward popup on win/lose after a fight',
                     default: false,
                 },
                 run() {
