@@ -2,6 +2,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.17.0] - 2025-10-29
+
+### Changed
+- HH++ pin is hidden in favor of the game's new pin
+
+### Fixed
+- Fixing some style issues with the new game update and a bug that wasn't fixed on test before rollout...  
+
 ## [0.16.5] - 2025-10-25
 
 ### Fixed
