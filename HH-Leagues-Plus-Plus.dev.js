@@ -496,7 +496,6 @@
         function RewardHandlePopup(rewards)
         {
             if(config.RemoveRewardPopup){
-                console.log("no reward popup activated")
                 return;
             }
             if(!rewards.lose)
