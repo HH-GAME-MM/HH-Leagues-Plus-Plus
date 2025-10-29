@@ -66,6 +66,11 @@
         LeaguesPreBattle_css();
     }
 
+    if (localStorage.getItem('HHPlusPlusLeaguePinPlayer') !== null) {
+        // turn off HH++ pin
+        localStorage.setItem('HHPlusPlusLeaguePinPlayer', 'false');
+    }
+
     function Leagues_css()
     {
         let css = document.createElement('style');
@@ -151,24 +156,20 @@
         css.sheet.insertRule(`#leagues .league_content.hidden_girl .league_table .data-list .data-row div.head-column[column="team"] { overflow: unset; }`);
         css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row.player-row.pinned { width: 47rem; }');
 
+        if (config.HHPlusPlus) {
+            // fix footer for pinned row
+            css.sheet.insertRule('#leagues .league_content .league_table .data-list .data-row.player-row.pinned { top: 29.5rem; }');
+            css.sheet.insertRule('#leagues .league_content .league_table.player-row-pinned { height: unset; margin-bottom: 2.75rem; }');
+            css.sheet.insertRule('.player-pin { display: none; }');
+        }
+
         if(config.RemoveChallengeColumn)
         {
-            //remove challenge column and css for the pin inside the match history
             css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="can_fight"], #leagues .league_content .league_table .data-list .data-row .head-column[column="can_fight"] {
                                       display: none;
                                   }`);
             css.sheet.insertRule(`#leagues .league_content.hidden_girl .league_table .data-list .data-row .data-column[column="boosters"], #leagues .league_content.hidden_girl .league_table .data-list .data-row .head-column[column="boosters"] {
                                       min-width: 13.2rem;
-                                  }`);
-            css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row.body-row.player-row .data-column[column="match_history_sorting"] .player-pin img {
-                                      width: 1.5rem;
-                                      transform: scaleX(-1);
-                                  }`);
-            css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row.body-row.player-row .data-column[column="match_history_sorting"] .player-pin {
-                                      opacity: .5;
-                                  }`);
-            css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row.body-row.player-row .data-column[column="match_history_sorting"] .player-pin.pinned {
-                                      opacity: 1;
                                   }`);
         }
 
@@ -663,6 +664,7 @@
     {
         //default config
         let config = {
+            HHPlusPlus: false,
             ObjectivePopupEnabled: true,
             ChallengeX3ButtonEnabled: true,
             RemoveChallengeColumn: false
@@ -672,6 +674,8 @@
         const { HHPlusPlus, hhPlusPlusConfig } = window;
         if (typeof HHPlusPlus !== 'undefined' && typeof hhPlusPlusConfig !== 'undefined')
         {
+            config.HHPlusPlus = true;
+
             hhPlusPlusConfig.registerGroup({
                 key: 'HHLeaguesPlusPlus',
                 name: 'HH Leagues++'
