@@ -121,6 +121,8 @@
                               #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history"],
                               #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history_sorting"] {
                                   min-width: 5.2rem !important;
+                                  font-size: inherit;
+                                  line-height: 15px;
                               }`);
         css.sheet.insertRule(`#leagues .league_content .league_table .data-list .data-row .data-column[column="match_history"] .result,
                               #leagues .league_content .league_table .data-list .data-row .data-column[column="match_history_sorting"] .result,
