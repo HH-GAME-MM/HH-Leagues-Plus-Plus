@@ -2,6 +2,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.18.2] - 2025-11-12
+
+### Fixed
+- no css nesting support in older browsers
+
 ## [0.18.1] - 2025-11-12
 
 ### Fixed
