@@ -2,6 +2,11 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
+## [0.18.1] - 2025-11-12
+
+### Fixed
+- the new average text no longer takes up two rows
+
 ## [0.18.0] - 2025-10-29
 
 ### Added
