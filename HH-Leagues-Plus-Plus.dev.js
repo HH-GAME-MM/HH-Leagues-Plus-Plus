@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name         HH Leagues++ (Dev Version)
-// @version      0.18.0
+// @version      0.18.2
 // @description  Upgrade League with various features
 // @author       -MM-, xnh0x
 // @match        https://*.hentaiheroes.com/leagues.html*
@@ -74,144 +74,132 @@
         if(!config.ChallengeX3ButtonEnabled)
         {
             addStyle(`
-                #leagues .league_opponent .player-panel-buttons { 
-                    .league-multiple-battle-button { 
-                        display:none !important;
-                    }
-                    .league-single-battle-button {
-                        width: 75%;
-                    }
+                #leagues .league_opponent .player-panel-buttons .league-multiple-battle-button { 
+                    display:none !important;
+                }
+                #leagues .league_opponent .player-panel-buttons .league-single-battle-button {
+                    width: 75%;
                 }
             `);
         }
 
         addStyle(`
-            #leagues {
-                .league_content {
-                    max-width: 49rem !important;
-                    
-                    .league_buttons {
-                        .league_buttons_block .multiple-battles {
-                            min-width: 6.7rem;
-                            min-height: 54px;
-                            margin-right: 10px;
-                        }
-                        .change_team_container #change_team {
-                            min-width: 6.7rem;
-                            height: 54px;
-                        }
-                        .change_team_container #change_team div {
-                            height: 100%;
-                            display: flex;
-                            justify-content: center;
-                            align-items: center;
-                        }
-                        .league_end_in div p {
-                            max-width: 6.5rem;
-                            line-height: 1;
-                        }
-                    }
-                
-                    .league_table .data-list {
-                        .data-row .data-column[column="team"] { 
-                            column-gap: 3px;
-                        }
-                        .data-row .data-column[column="team"] .team-theme.icon {
-                            width: 20px; height: 20px;
-                        }
-                        .data-row .data-column[column="nickname"].clubmate .nickname {
-                            color: #00CC00;
-                        }
-                        .data-row.body-row.selected { 
-                            background-color: rgb(158, 108, 37);
-                        }
-                        .data-row.body-row.player-row.selected {
-                            text-shadow: rgb(0, 0, 0) 1px 1px 0px, rgb(0, 0, 0) -1px 1px 0px, rgb(0, 0, 0) -1px -1px 0px, rgb(0, 0, 0) 1px -1px 0px;
-                        
-                            .data-column[column="boosters"],
-                            .head-column[column="boosters"],
-                            .data-column[column="team"],
-                            .head-column[column="team"],
-                            .data-column[column="value"],
-                            .head-column[column="value"] {
-                                transition: none;
-                            }
-                        }
-                    }
-                }
-                
-                .league_opponent {
-                    .player_team_block.opponent {
-                        padding-left: 0.75rem !important;
-                        padding-right: 0.75rem !important;
-                        margin-top: -10px !important;
-                        height: 508px !important;
-                        border-radius: .4rem !important;
-                    }
-                    .player-panel-buttons {
-                        flex-direction: row !important;
-                        justify-content: center !important;
-                    }
-                    .player-panel-buttons .battle-action-button.green_button_L {
-                        min-width: 50%
-                    }
-                    .player-profile-picture {
-                        cursor:pointer !important
-                    }
-                }
-                
-                .league_content .league_table .data-list .data-row {
-                    .data-column[column="level"],
-                    .head-column[column="level"],
-                    .data-column[column="place"],
-                    .head-column[column="place"] {
-                        min-width: 1.4rem !important;
-                    }
-                    .data-column[column="player_league_points"],
-                    .head-column[column="player_league_points"],
-                    .data-column[column="power"],
-                    .head-column[column="power"],
-                    .data-column[column="team"],
-                    .head-column[column="team"] {
-                        min-width: 2rem !important;
-                    }
-                    .data-column[column="match_history"],
-                    .head-column[column="match_history"],
-                    .data-column[column="match_history_sorting"],
-                    .head-column[column="match_history_sorting"] {
-                        min-width: 5.2rem !important;
-                        font-size: inherit;
-                        line-height: 15px;
-                    }
-                    .head-column[column="match_history"] .result,
-                    .data-column[column="match_history"] .result,
-                    .data-column[column="match_history_sorting"] .result,
-                    .head-column[column="match_history_sorting"] .result {
-                        width: 1.7rem !important;
-                        height: 1.7rem !important;
-                        line-height: 1.7rem !important;
-                    }
-                }
-
-                .league_opponent.hidden_girl {
-                    position: absolute;
-                    right: 0;
-                    top: 0;
-                    height: 100%;
-                    width: 15rem;
-                    transition: all .5s;
-                    opacity: 1;
-                    padding-top: 10px;
-                }
-                
-                .league_opponent {
-                    position: absolute;
-                    opacity: 0;
-                    right: -13rem;
-                    width: 15rem;
-                    min-width: 13rem;
-                    padding-top: 10px;
-                }
+            #leagues .league_content {
+                max-width: 49rem !important;
+            }
+            
+            #leagues .league_content .league_buttons .league_buttons_block .multiple-battles {
+                min-width: 6.7rem;
+                min-height: 54px;
+                margin-right: 10px;
+            }
+            #leagues .league_content .league_buttons .change_team_container #change_team {
+                min-width: 6.7rem;
+                height: 54px;
+            }
+            #leagues .league_content .league_buttons .change_team_container #change_team div {
+                height: 100%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+            #leagues .league_content .league_buttons .league_end_in div p {
+                max-width: 6.5rem;
+                line-height: 1;
+            }
+            
+            #leagues .league_content .league_table .data-list .data-row .data-column[column="team"] { 
+                column-gap: 3px;
+            }
+            #leagues .league_content .league_table .data-list .data-row .data-column[column="team"] .team-theme.icon {
+                width: 20px; height: 20px;
+            }
+            #leagues .league_content .league_table .data-list .data-row .data-column[column="nickname"].clubmate .nickname {
+                color: #00CC00;
+            }
+            #leagues .league_content .league_table .data-list .data-row.body-row.selected { 
+                background-color: rgb(158, 108, 37);
+            }
+            #leagues .league_content .league_table .data-list .data-row.body-row.player-row.selected {
+                text-shadow: rgb(0, 0, 0) 1px 1px 0px, rgb(0, 0, 0) -1px 1px 0px, rgb(0, 0, 0) -1px -1px 0px, rgb(0, 0, 0) 1px -1px 0px;
+            }
+            
+            #leagues .league_content .league_table .data-list .data-row.body-row.player-row.selected .data-column[column="boosters"],
+            #leagues .league_content .league_table .data-list .data-row.body-row.player-row.selected .head-column[column="boosters"],
+            #leagues .league_content .league_table .data-list .data-row.body-row.player-row.selected .data-column[column="team"],
+            #leagues .league_content .league_table .data-list .data-row.body-row.player-row.selected .head-column[column="team"],
+            #leagues .league_content .league_table .data-list .data-row.body-row.player-row.selected .data-column[column="value"],
+            #leagues .league_content .league_table .data-list .data-row.body-row.player-row.selected .head-column[column="value"] {
+                transition: none;
+            }
+            
+            #leagues .league_opponent .player_team_block.opponent {
+                padding-left: 0.75rem !important;
+                padding-right: 0.75rem !important;
+                margin-top: -10px !important;
+                height: 508px !important;
+                border-radius: .4rem !important;
+            }
+            #leagues .league_opponent .player-panel-buttons {
+                flex-direction: row !important;
+                justify-content: center !important;
+            }
+            #leagues .league_opponent .player-panel-buttons .battle-action-button.green_button_L {
+                min-width: 50%
+            }
+            #leagues .league_opponent .player-profile-picture {
+                cursor:pointer !important
+            }
+            
+            #leagues .league_content .league_table .data-list .data-row .data-column[column="level"],
+            #leagues .league_content .league_table .data-list .data-row .head-column[column="level"],
+            #leagues .league_content .league_table .data-list .data-row .data-column[column="place"],
+            #leagues .league_content .league_table .data-list .data-row .head-column[column="place"] {
+                min-width: 1.4rem !important;
+            }
+            #leagues .league_content .league_table .data-list .data-row .data-column[column="player_league_points"],
+            #leagues .league_content .league_table .data-list .data-row .head-column[column="player_league_points"],
+            #leagues .league_content .league_table .data-list .data-row .data-column[column="power"],
+            #leagues .league_content .league_table .data-list .data-row .head-column[column="power"],
+            #leagues .league_content .league_table .data-list .data-row .data-column[column="team"],
+            #leagues .league_content .league_table .data-list .data-row .head-column[column="team"] {
+                min-width: 2rem !important;
+            }
+            #leagues .league_content .league_table .data-list .data-row .data-column[column="match_history"],
+            #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history"],
+            #leagues .league_content .league_table .data-list .data-row .data-column[column="match_history_sorting"],
+            #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history_sorting"] {
+                min-width: 5.2rem !important;
+                font-size: inherit;
+                line-height: 15px;
+            }
+            #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history"] .result,
+            #leagues .league_content .league_table .data-list .data-row .data-column[column="match_history"] .result,
+            #leagues .league_content .league_table .data-list .data-row .data-column[column="match_history_sorting"] .result,
+            #leagues .league_content .league_table .data-list .data-row .head-column[column="match_history_sorting"] .result {
+                width: 1.7rem !important;
+                height: 1.7rem !important;
+                line-height: 1.7rem !important;
+            }
+            
+            #leagues .league_opponent.hidden_girl {
+                position: absolute;
+                right: 0;
+                top: 0;
+                height: 100%;
+                width: 15rem;
+                transition: all .5s;
+                opacity: 1;
+                padding-top: 10px;
+            }
+            
+            #leagues .league_opponent {
+                position: absolute;
+                opacity: 0;
+                right: -13rem;
+                width: 15rem;
+                min-width: 13rem;
+                padding-top: 10px;
             }
         `);
 
@@ -239,7 +227,9 @@
         if (config.HHPlusPlus) {
             // fix footer for pinned row
             addStyle(`
-                #leagues .league_content .league_table .data-list .data-row.player-row.pinned { top: 29.5rem; }
+                #leagues .league_content .league_table .data-list .data-row.player-row.pinned { 
+                    top: 29.5rem;
+                }
                 #leagues .league_content .league_table.player-row-pinned { 
                     height: 100%; 
                     margin-bottom: 2.75rem;
@@ -251,17 +241,14 @@
         if(config.RemoveChallengeColumn)
         {
             addStyle(`
-                #leagues .league_content .league_table .data-list .data-row {
-                    .data-column[column="can_fight"],
-                    .head-column[column="can_fight"] {
-                        display: none;
-                    }
+                #leagues .league_content .league_table .data-list .data-row .data-column[column="can_fight"],
+                #leagues .league_content .league_table .data-list .data-row .head-column[column="can_fight"] {
+                    display: none;
                 }
-                #leagues .league_content.hidden_girl .league_table .data-list .data-row {
-                    .data-column[column="boosters"],
-                    .head-column[column="boosters"] {
-                        min-width: 13.2rem;
-                    }
+                
+                #leagues .league_content.hidden_girl .league_table .data-list .data-row .data-column[column="boosters"],
+                #leagues .league_content.hidden_girl .league_table .data-list .data-row .head-column[column="boosters"] {
+                    min-width: 13.2rem;
                 }
             `);
         }
