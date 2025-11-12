@@ -784,8 +784,20 @@
 
             hhPlusPlusConfig.registerGroup({
                 key: 'HHLeaguesPlusPlus',
-                name: `<span tooltip="${GM_info.script.version}">HH Leagues++</span>`
+                name: `Leagues++`
             });
+
+            addStyle(`
+            h4.HHLeaguesPlusPlus.selected::after {
+                content: 'v${GM_info.script.version}';
+                display: block;
+                position: absolute;
+                top: -10px;
+                right: -15px;
+                font-size: 10px;
+            }
+            h4.HHLeaguesPlusPlus.selected:last-child::after { right: 0; }
+        `);
 
             hhPlusPlusConfig.registerModule({
                 group: 'HHLeaguesPlusPlus',
