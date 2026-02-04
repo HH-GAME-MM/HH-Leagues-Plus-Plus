@@ -348,7 +348,7 @@
             }
 
             // move pin to the challenge column
-            const $pin = $('.pin-player-row');
+            const $pin = $('.player-row .pin-player-row');
             $pin.detach().appendTo('.player-row .data-column[column="can_fight"]');
             // delete the now empty column
             $('.data-column[column="player_pin"]').remove();
